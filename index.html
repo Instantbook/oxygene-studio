@@ -307,6 +307,9 @@ section.show { display: flex; }
       <li>The Lead list includes standards such as Piano, Electric Piano, Organ, Electric Guitar, Flute and Brass.
         They are synth versions, not recordings of the real instruments.</li>
       <li>Use the <b>note pads</b> at the bottom to hear the sound while you change it.</li>
+      <li><b>Echo and reverb</b> (the last card before saving) set how much of the sound goes to the tape echo and the reverb.
+        Every sound brings its own amounts: the space leads have plenty of echo, Piano, Organ and Guitar are nearly dry.
+        Turn Echo to 0 for no echo at all.</li>
       <li>To keep a sound you made: type a name under “Keep it as your own sound” and press <b>Save</b>.
         Your sounds appear first in the list, in every song. <b>Delete</b> removes one; <b>Revert</b> throws away
         your changes and goes back to the saved sound.</li>
@@ -427,6 +430,8 @@ section.show { display: flex; }
     <dl>
       <dt>No sound on an iPhone</dt>
       <dd>Switch off silent mode (the ring/silent switch on the side) and turn the volume up. Then tap a key.</dd>
+      <dt>Every note has an echo I do not want</dt>
+      <dd>SOUND tab → scroll down to <b>Echo and reverb</b> → turn Echo down. (The same control is on MIX, under the track’s name.)</dd>
       <dt>No sound at all</dt>
       <dd>Sound starts after your first tap. Check MIX: Master is up, the track is not muted, its Level is up.</dd>
       <dt>▶ does nothing</dt>
@@ -615,6 +620,21 @@ section.show { display: flex; }
       ['Fifth Drone', 0, 380, 3, 1200, 0.03, 0.6, 0.8, 0.4, 0.05, 5, 0, 8, 0.7, 0.6, 7, 0]
     ])
   };
+
+  // How much echo and reverb suits each sound: [echo, reverb]. Sounds not listed use the instrument's usual amount.
+  var SPACE_DEF = { strings: [0.15, 0.45], lead: [0.45, 0.35], bass: [0.03, 0.05] };
+  var SPACE = {
+    strings: { 'Dry Ensemble': [0, 0.2], 'Deep Space': [0.3, 0.6], 'Warm Brass Pad': [0.05, 0.3], 'Soft Flutes': [0.08, 0.35],
+      'Reed Organ': [0, 0.2], 'Cathedral Organ': [0, 0.6], 'Space Organ': [0.25, 0.5] },
+    lead: { 'Theremin': [0.35, 0.45], 'Space Bell': [0.5, 0.5], 'Piano': [0, 0.15], 'Electric Piano': [0.04, 0.22], 'Harpsichord': [0, 0.15],
+      'Organ': [0, 0.22], 'Rock Organ': [0, 0.18], 'Electric Guitar': [0.1, 0.2], 'Clean Guitar': [0.06, 0.22], 'Flute': [0.04, 0.3],
+      'Brass': [0, 0.25], 'Solo Violin': [0.04, 0.3], 'Clarinet': [0, 0.25] },
+    bass: {}
+  };
+  function presetSpace(inst, name) {
+    var v = SPACE[inst][name] || SPACE_DEF[inst];
+    return { echo: v[0], reverb: v[1] };
+  }
 
   // A sound's parameters made safe: every control present and inside its range.
   function cleanParams(inst, src, base) {
@@ -995,7 +1015,7 @@ section.show { display: flex; }
     WAVES: WAVES, PARAMS: PARAMS, PRESETS: PRESETS, RHYTHMS: RHYTHMS, DEMOS: DEMOS,
     midiToFreq: midiToFreq, noteName: noteName, inScale: inScale, scaleNotes: scaleNotes,
     emptyPattern: emptyPattern, defaultSong: defaultSong, validateSong: validateSong,
-    presetParams: presetParams, setPreset: setPreset, cleanParams: cleanParams,
+    presetParams: presetParams, setPreset: setPreset, cleanParams: cleanParams, presetSpace: presetSpace,
     addNote: addNote, toggleNote: toggleNote, patternIsEmpty: patternIsEmpty,
     lane: lane, applyRhythm: applyRhythm, rowsFor: rowsFor,
     expandChain: expandChain, stepSeconds: stepSeconds, seqSeconds: seqSeconds,
@@ -2104,7 +2124,7 @@ section.show { display: flex; }
       C.MELODIC.forEach(function (inst) {
         (Array.isArray(raw[inst]) ? raw[inst] : []).slice(0, 100).forEach(function (x) {
           var name = x && String(x.name || '').trim().slice(0, 40);
-          if (name && !builtIn(inst, name) && !mine(inst, name)) lib[inst].push({ name: name, p: C.cleanParams(inst, x.p) });
+          if (name && !builtIn(inst, name) && !mine(inst, name)) lib[inst].push({ name: name, p: C.cleanParams(inst, x.p), fx: cleanFx(x.fx) });
         });
       });
     } catch (e) { /* no saved sounds */ }
@@ -2112,16 +2132,25 @@ section.show { display: flex; }
   function saveLib() {
     try { localStorage.setItem(LIB, JSON.stringify(lib)); return true; } catch (e) { return false; }
   }
+  function cleanFx(fx) {                     // a sound's own echo and reverb amounts; null for sounds saved before they had any
+    if (!fx || !isFinite(fx.echo) || !isFinite(fx.reverb)) return null;
+    return { echo: clamp(+fx.echo, 0, 1), reverb: clamp(+fx.reverb, 0, 1) };
+  }
+  function fxOf(inst, name) { var u = mine(inst, name); return u ? u.fx : builtIn(inst, name) ? C.presetSpace(inst, name) : null; }
   function pick(list, name) { return list.filter(function (x) { return x.name === name; })[0] || null; }
   function builtIn(inst, name) { return pick(C.PRESETS[inst], name); }
   function mine(inst, name) { return pick(lib[inst], name); }
   function useSound(inst, name) {
     var u = mine(inst, name);
     if (u) song.sounds[inst] = { preset: u.name, params: C.clone(u.p) }; else C.setPreset(song, inst, name);
+    var fx = fxOf(inst, name);             // the sound brings its own echo and reverb with it
+    if (fx) { song.mix[inst].echo = fx.echo; song.mix[inst].reverb = fx.reverb; }
     changed();
   }
   function isEdited(inst) {                  // have the controls been moved away from the named sound?
     var snd = song.sounds[inst], ref = mine(inst, snd.preset) || builtIn(inst, snd.preset);
+    var fx = fxOf(inst, snd.preset), m = song.mix[inst];
+    if (fx && (Math.abs(fx.echo - m.echo) > 1e-6 || Math.abs(fx.reverb - m.reverb) > 1e-6)) return true;
     return !ref || C.PARAMS[inst].some(function (d) { return Math.abs(ref.p[d.id] - snd.params[d.id]) > 1e-6 * Math.max(1, Math.abs(ref.p[d.id])); });
   }
   function soundSelect(inst, after) {
@@ -2154,14 +2183,19 @@ section.show { display: flex; }
       byName[d.g].push(slider(d, function () { return snd.params[d.id]; }, function (v) { snd.params[d.id] = d.choices || d.step === 1 ? Math.round(v) : v; showMark(); }));
     });
     groups.forEach(function (g) { body.appendChild(card(g, [el('div', { cls: 'sliders' }, byName[g])])); });
+    var mx = song.mix[inst];
+    body.appendChild(card('Echo and reverb', [el('div', { cls: 'sliders' }, ['echo', 'reverb'].map(function (id) {
+      return slider({ id: id, label: titleCase(id), min: 0, max: 1, step: 0.01 }, function () { return mx[id]; }, function (v) { mx[id] = v; showMark(); });
+    })), el('div', { cls: 'hint', text: 'How much of this sound goes to the tape echo and the reverb. 0 is dry. Every sound brings its own amounts; '
+      + 'the same two controls are on the MIX tab.' })]));
     var own = mine(inst, snd.preset);
     var name = el('input', { type: 'text', maxLength: 40, css: 'flex:1;min-width:0', placeholder: 'Name for your sound', value: own ? own.name : '' });
     var acts = [name, btn('Save', function () {
       var n = name.value.trim();
       if (!n) return status('Give the sound a name first');
       if (builtIn(inst, n)) return status('"' + n + '" is a built-in sound: pick another name');
-      var had = mine(inst, n), p = C.cleanParams(inst, snd.params);
-      if (had) had.p = p; else lib[inst].unshift({ name: n, p: p });
+      var had = mine(inst, n), p = C.cleanParams(inst, snd.params), fx = { echo: song.mix[inst].echo, reverb: song.mix[inst].reverb };
+      if (had) { had.p = p; had.fx = fx; } else lib[inst].unshift({ name: n, p: p, fx: fx });
       snd.preset = n; save();
       status(saveLib() ? (had ? 'Updated "' : 'Saved "') + n + '" in your ' + titleCase(inst) + ' sounds' : 'This browser would not store it; it stays in the song only');
       renderSound();
