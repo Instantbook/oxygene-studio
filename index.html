@@ -102,6 +102,9 @@ section.show { display: flex; }
 #kb { position: relative; height: 190px; margin: 0 6px 8px; touch-action: none; border-radius: 0 0 8px 8px; overflow: hidden; border-top: 3px solid var(--cy2); }
 .key { position: absolute; top: 0; bottom: 0; background: linear-gradient(#c9cfdd, #eef1f7 85%); border: 1px solid #5c6680; border-radius: 0 0 6px 6px; color: #55607a; font-size: 10px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; }
 .key.b { background: linear-gradient(#0d111c, #2a3146); border-color: #000; bottom: 40%; z-index: 2; border-radius: 0 0 4px 4px; }
+#bend { position: relative; height: 30px; margin: 0 6px 6px; border-radius: 8px; background: linear-gradient(90deg, #141b2e, #26304f 50%, #141b2e); border: 1px solid #2c3653; touch-action: none; overflow: hidden; }
+#bend span { position: absolute; left: 0; right: 0; top: 0; line-height: 28px; text-align: center; font-size: 11px; color: var(--dim); pointer-events: none; letter-spacing: .08em; }
+#bend i { position: absolute; top: 3px; bottom: 3px; left: 50%; width: 26px; margin-left: -13px; border-radius: 6px; background: var(--amber); opacity: .8; pointer-events: none; }
 #kb.harp { height: 250px; background: radial-gradient(ellipse at 50% 100%, #0f3a22 0%, #05080f 70%); border-top-color: #2bd46a; }
 .beam { position: absolute; top: 0; width: 3px; margin-left: -1.5px; transform-origin: 50% 0; background: linear-gradient(#8dffb6, #1fd163); box-shadow: 0 0 8px 2px rgba(60,255,130,.55); border-radius: 2px; pointer-events: none; }
 .beam.down { width: 5px; margin-left: -2.5px; background: #fff; box-shadow: 0 0 18px 7px rgba(170,255,205,.9); }
@@ -195,6 +198,7 @@ section.show { display: flex; }
   <section id="tab-play">
     <div class="scroll" id="playtop"></div>
     <div id="kbbar"></div>
+    <div id="bend"><i></i><span>◄ pitch slide ►</span></div>
     <div id="kb"></div>
   </section>
   <section id="tab-sound">
@@ -287,10 +291,18 @@ section.show { display: flex; }
       <li><b>Strings / Lead / Bass</b> chooses which instrument the keyboard plays.</li>
       <li><b>Strings</b> can play chords. <b>Lead</b> and <b>Bass</b> play one note at a time, like the old solo synths:
         a new note replaces the one before.</li>
-      <li><b>Wind</b> switches the wind on and off by hand. <b>Zap ↓, Zap ↑, Drops, Swell, Gust</b> fire the space effects.</li>
+      <li><b>Wind</b> switches the wind on and off by hand. The other pads fire the effects: <b>Zap ↓, Zap ↑, Drops, Swell, Gust</b> from space, and <b>Surf, Rain, Thunder, Birds, Bubbles</b> and <b>Rise</b> (a long climb into the next section).</li>
       <li>The <b>sound list</b> picks a sound for the instrument. <b>Edit sound</b> opens the SOUND tab.</li>
       <li><b>− and +</b> above the keys move the keyboard down or up an octave. You can also slide a finger across the keys.</li>
       <li><b>Hold</b> keeps notes sounding after you lift your finger; tap Hold again to let go.</li>
+      <li><b>Arp</b> (the list that says <b>Arp off</b>) is the running-notes machine. Choose <b>up</b>, <b>down</b>,
+        <b>up + down</b> or <b>random</b>, then hold two or more keys: they play one after another in time with the tempo.
+        The two lists beside it set the speed and how many octaves the pattern climbs. Switch <b>Hold</b> on and you can
+        tap the notes in and take your hands away. With the song playing the pattern stays on the beat, and ● records it
+        into a part. It works on the laser harp and on the test keys of the SOUND tab too.</li>
+      <li>The <b>pitch slide</b> strip above the keys bends the notes: put a finger on it and drag right for higher, left
+        for lower (a little near the middle, up to an octave at the ends). Let go and the pitch comes back. Slides are
+        played by hand; they are not recorded.</li>
       <li><b>Laser harp</b> swaps the keys for a fan of green beams and picks the <b>Laser Harp</b> lead sound. Touch a
         beam to play it, or slide across the beams. There is one beam for each note of the song’s key and scale, so every
         beam fits; the amber names are the home note. − and + move the beams an octave, recording works the same as with
@@ -332,7 +344,7 @@ section.show { display: flex; }
     </ul>
     <h3>What the controls do (Lead and Bass)</h3>
     <ul>
-      <li><b>Wave</b>: the raw tone. Saw is bright and buzzy, Square hollow, Triangle and Sine soft, Pulse nasal, Organ like drawbars.</li>
+      <li><b>Wave</b>: the raw tone. Saw is bright and buzzy, Square hollow, Triangle and Sine soft, Pulse nasal, Organ like drawbars, <b>Sync</b> and <b>Sync high</b> the hard, tearing tone of the laser harp, <b>Bell</b> glassy.</li>
       <li><b>Osc 2 level / detune / pitch</b>: a second copy of the tone. A little detune makes it fat; pitch 12 adds an
         octave above, 7 a fifth.</li>
       <li><b>Sub level</b>: adds weight one octave below.</li>
@@ -347,6 +359,7 @@ section.show { display: flex; }
     <h3>What the controls do (Strings)</h3>
     <ul>
       <li><b>Brightness</b>, <b>Wave</b> and <b>Detune</b> set the basic tone. <b>4′ octave</b> adds an octave above, <b>16′ octave</b> one below.</li>
+      <li><b>Choir</b>: <b>Voice</b> turns the strings into singing voices, <b>Vowel</b> chooses Aah, Ooh or Eee. The choir sounds in the list use it.</li>
       <li><b>Attack</b> and <b>Release</b>: how slowly the chord swells in and fades out.</li>
       <li><b>Ensemble</b>: the shimmering “many players” effect.</li>
       <li><b>Phaser rate / depth / mix</b>: the slow sweeping swirl that makes the classic space-strings sound.
@@ -391,7 +404,7 @@ section.show { display: flex; }
         square to put a note there. Tap the start of a note to remove it. The rows are the notes of the song’s scale.
         Strings can stack notes into chords; Bass and Lead keep one note at a time.</li>
       <li><b>Drums:</b> each row is a drum. Tap once for a normal hit, again for a loud (accented) hit, a third time to clear.
-        <b>Rhythm box…</b> fills the part with a ready-made rhythm you can then change.</li>
+        <b>Rhythm box…</b> fills the part with a ready-made rhythm you can then change. The ones named after a record are in its manner, not exact copies.</li>
       <li><b>FX:</b> each row is a space effect; tap to fire it at that step.</li>
       <li><b>Sound</b> (Bass, Strings, Lead): the sound this part plays. Pick another from the list right here, or press
         <b>Edit sound</b> to change its controls, echo and reverb for this part only.</li>
@@ -538,7 +551,13 @@ section.show { display: flex; }
     { id: 'zapUp', label: 'Zap ↑' },
     { id: 'drops', label: 'Drops' },
     { id: 'swell', label: 'Swell' },
-    { id: 'gust', label: 'Gust' }
+    { id: 'gust', label: 'Gust' },
+    { id: 'surf', label: 'Surf' },
+    { id: 'rain', label: 'Rain' },
+    { id: 'thunder', label: 'Thunder' },
+    { id: 'birds', label: 'Birds' },
+    { id: 'bubbles', label: 'Bubbles' },
+    { id: 'rise', label: 'Rise' }
   ];
 
   // Melodic tracks: range shown in the sequencer, and where the keyboard starts.
@@ -550,7 +569,8 @@ section.show { display: flex; }
   var MELODIC = ['strings', 'lead', 'bass'];
   var CHANNELS = ['strings', 'lead', 'bass', 'drums', 'fx'];
 
-  var WAVES = ['Saw', 'Square', 'Triangle', 'Sine', 'Pulse', 'Organ'];
+  var WAVES = ['Saw', 'Square', 'Triangle', 'Sine', 'Pulse', 'Organ', 'Sync', 'Sync high', 'Bell'];
+  var VOWELS = ['Aah', 'Ooh', 'Eee'];
 
   // ---- sound parameters (drive the sliders and the validation) -------------
   // g = the group the control sits in on the SOUND tab.
@@ -565,11 +585,13 @@ section.show { display: flex; }
     { id: 'four', g: 'Tone', label: "4' octave", min: 0, max: 1, step: 0.01, def: 0.55 },
     { id: 'sub', g: 'Tone', label: "16' octave", min: 0, max: 1, step: 0.01, def: 0 },
     { id: 'detune', g: 'Tone', label: 'Detune', min: 0, max: 30, step: 0.5, unit: 'ct', def: 6 },
-    { id: 'wave', g: 'Tone', label: 'Wave', min: 0, max: 5, step: 1, choices: WAVES, def: 0 }
+    { id: 'wave', g: 'Tone', label: 'Wave', min: 0, max: 8, step: 1, choices: WAVES, def: 0 },
+    { id: 'voice', g: 'Choir', label: 'Voice', min: 0, max: 1, step: 0.01, def: 0 },
+    { id: 'vowel', g: 'Choir', label: 'Vowel', min: 0, max: 2, step: 1, choices: VOWELS, def: 0 }
   ];
 
   var MONO_PARAMS = [
-    { id: 'wave', g: 'Oscillators', label: 'Wave', min: 0, max: 5, step: 1, choices: WAVES, def: 0 },
+    { id: 'wave', g: 'Oscillators', label: 'Wave', min: 0, max: 8, step: 1, choices: WAVES, def: 0 },
     { id: 'cutoff', g: 'Filter', label: 'Cutoff', min: 60, max: 12000, log: true, unit: 'Hz', def: 1800 },
     { id: 'res', g: 'Filter', label: 'Resonance', min: 0.5, max: 18, step: 0.1, def: 4 },
     { id: 'envAmt', g: 'Filter', label: 'Filter env', min: 0, max: 6000, step: 50, unit: 'ct', def: 2400 },
@@ -614,12 +636,19 @@ section.show { display: flex; }
       ['Soft Flutes', 0.15, 0.7, 3000, 0.5, 0.2, 0.3, 0.15, 0.35, 0, 3, 3],
       ['Reed Organ', 0.03, 0.25, 4500, 0.4, 0.4, 0.3, 0.2, 0.4, 0.2, 3, 4],
       ['Cathedral Organ', 0.02, 0.5, 6500, 0.25, 0.2, 0.2, 0, 0.6, 0.7, 2, 5],
-      ['Space Organ', 0.05, 1.4, 5000, 0.7, 0.25, 0.9, 1, 0.5, 0.3, 4, 5]
+      ['Space Organ', 0.05, 1.4, 5000, 0.7, 0.25, 0.9, 1, 0.5, 0.3, 4, 5],
+      //                                                                  wave voice vowel
+      ['Space Choir', 0.35, 1.8, 6000, 0.9, 0.12, 0.4, 0.4, 0.4, 0.2, 9, 0, 0.85, 0],
+      ['Ooh Choir', 0.45, 2.0, 5000, 0.85, 0.1, 0.3, 0.3, 0.3, 0.3, 8, 0, 0.9, 1],
+      ['Vocoder Pad', 0.05, 0.5, 8000, 0.5, 0.6, 0.6, 0.6, 0.6, 0, 5, 4, 0.8, 2],
+      ['Bell Pad', 0.02, 2.5, 9000, 0.6, 0.15, 0.3, 0.3, 0.5, 0, 4, 8],
+      ['Brass Section', 0.06, 0.3, 2600, 0.3, 0.2, 0.1, 0, 0.3, 0.2, 9, 0],
+      ['Sync Sweep Pad', 0.5, 2.2, 4800, 0.8, 0.08, 1, 1, 0.3, 0.3, 7, 6]
     ]),
     //         wave cutoff res envAmt attack decay sustain rel glide vibRate vibDep detune osc2 sub pitch2 drive
     lead: rows('lead', [
       ['Laser Lead', 0, 1800, 5, 3000, 0.005, 0.25, 0.6, 0.25, 0.06, 5.5, 12, 8, 0.7, 0, 0, 0],
-      ['Laser Harp', 0, 1300, 8, 4400, 0.003, 0.55, 0.5, 0.8, 0, 5.5, 5, 16, 0.85, 0, 12, 0.4],
+      ['Laser Harp', 6, 2600, 5, 3600, 0.003, 0.6, 0.55, 0.8, 0, 5.5, 5, 14, 0.7, 0, 0, 0.25],
       ['Soft Whistle', 2, 3000, 1, 0, 0.06, 0.3, 0.9, 0.3, 0.09, 5, 18, 0, 0, 0, 0, 0],
       ['Square Hollow', 1, 1400, 3, 1800, 0.01, 0.3, 0.7, 0.2, 0.02, 5, 6, 5, 0.3, 0.2, 0, 0],
       ['Sweep Lead', 0, 500, 9, 4200, 0.3, 1.2, 0.5, 0.6, 0.12, 4.5, 10, 12, 0.8, 0.3, 0, 0],
@@ -638,7 +667,14 @@ section.show { display: flex; }
       ['Flute', 2, 2400, 1, 300, 0.07, 0.3, 0.85, 0.15, 0.02, 5, 10, 0, 0, 0, 0, 0],
       ['Brass', 0, 700, 1.5, 2600, 0.05, 0.35, 0.75, 0.18, 0.01, 5.5, 5, 6, 0.6, 0, 0, 0],
       ['Solo Violin', 0, 2600, 2, 400, 0.09, 0.4, 0.85, 0.25, 0.04, 6, 16, 4, 0.3, 0, 0, 0],
-      ['Clarinet', 1, 1500, 1.2, 500, 0.04, 0.3, 0.85, 0.15, 0.01, 5, 6, 0, 0, 0, 0, 0]
+      ['Clarinet', 1, 1500, 1.2, 500, 0.04, 0.3, 0.85, 0.15, 0.01, 5, 6, 0, 0, 0, 0, 0],
+      ['Sync Lead', 7, 3000, 3, 2400, 0.004, 0.4, 0.7, 0.3, 0.05, 5.5, 10, 10, 0.6, 0, 0, 0.3],
+      ['Swoop Lead', 0, 2000, 4, 1500, 0.02, 0.4, 0.8, 0.5, 0.3, 5, 14, 7, 0.5, 0, 0, 0],
+      ['Glass Bell', 8, 9000, 0.7, 0, 0.002, 2.2, 0, 1.6, 0, 5, 0, 5, 0.5, 0, 12, 0],
+      ['Chimes', 8, 11000, 0.7, 0, 0.002, 1.2, 0, 1.0, 0, 5, 0, 7, 0.6, 0, 19, 0],
+      ['Digital Piano', 8, 5000, 0.7, 2400, 0.002, 1.4, 0.1, 0.4, 0, 5, 0, 3, 0.4, 0.3, 0, 0],
+      ['Fields Stab', 0, 1200, 4, 4200, 0.002, 0.14, 0.05, 0.1, 0, 5, 0, 12, 0.8, 0, 7, 0.1],
+      ['Bright Brass', 0, 1100, 2, 3600, 0.03, 0.3, 0.8, 0.2, 0.01, 5.5, 6, 10, 0.8, 0, 0, 0.1]
     ]),
     bass: rows('bass', [
       ['Bubble Bass', 0, 220, 8, 3600, 0.003, 0.16, 0.15, 0.12, 0, 5, 0, 4, 0.4, 0.5, 0, 0],
@@ -653,7 +689,10 @@ section.show { display: flex; }
       ['Upright', 2, 520, 1, 1800, 0.004, 0.7, 0.08, 0.2, 0.03, 5, 0, 2, 0.2, 0.5, 0, 0],
       ['Organ Pedal', 5, 700, 0.7, 0, 0.01, 0.2, 1, 0.1, 0, 5, 0, 2, 0.4, 0.7, 12, 0],
       ['Zap Seq', 0, 180, 10, 5200, 0.002, 0.09, 0.05, 0.06, 0, 5, 0, 5, 0.5, 0.2, 0, 0],
-      ['Fifth Drone', 0, 380, 3, 1200, 0.03, 0.6, 0.8, 0.4, 0.05, 5, 0, 8, 0.7, 0.6, 7, 0]
+      ['Fifth Drone', 0, 380, 3, 1200, 0.03, 0.6, 0.8, 0.4, 0.05, 5, 0, 8, 0.7, 0.6, 7, 0],
+      ['Fields Bass', 0, 300, 6, 4200, 0.002, 0.12, 0.1, 0.08, 0, 5, 0, 6, 0.5, 0.3, 0, 0.05],
+      ['Sequencer Pluck', 1, 700, 5, 3000, 0.002, 0.1, 0, 0.08, 0, 5, 0, 5, 0.4, 0, 12, 0],
+      ['Sync Bass', 6, 600, 3, 2400, 0.003, 0.25, 0.4, 0.12, 0, 5, 0, 4, 0.4, 0.5, 0, 0]
     ])
   };
 
@@ -661,10 +700,12 @@ section.show { display: flex; }
   var SPACE_DEF = { strings: [0.15, 0.45], lead: [0.45, 0.35], bass: [0.03, 0.05] };
   var SPACE = {
     strings: { 'Dry Ensemble': [0, 0.2], 'Deep Space': [0.3, 0.6], 'Warm Brass Pad': [0.05, 0.3], 'Soft Flutes': [0.08, 0.35],
-      'Reed Organ': [0, 0.2], 'Cathedral Organ': [0, 0.6], 'Space Organ': [0.25, 0.5] },
+      'Reed Organ': [0, 0.2], 'Cathedral Organ': [0, 0.6], 'Space Organ': [0.25, 0.5], 'Space Choir': [0.1, 0.6], 'Ooh Choir': [0.1, 0.6],
+      'Vocoder Pad': [0.15, 0.3], 'Bell Pad': [0.3, 0.6], 'Brass Section': [0, 0.3], 'Sync Sweep Pad': [0.2, 0.5] },
     lead: { 'Laser Harp': [0.4, 0.5], 'Theremin': [0.35, 0.45], 'Space Bell': [0.5, 0.5], 'Piano': [0, 0.15], 'Electric Piano': [0.04, 0.22], 'Harpsichord': [0, 0.15],
       'Organ': [0, 0.22], 'Rock Organ': [0, 0.18], 'Electric Guitar': [0.1, 0.2], 'Clean Guitar': [0.06, 0.22], 'Flute': [0.04, 0.3],
-      'Brass': [0, 0.25], 'Solo Violin': [0.04, 0.3], 'Clarinet': [0, 0.25] },
+      'Brass': [0, 0.25], 'Solo Violin': [0.04, 0.3], 'Clarinet': [0, 0.25], 'Glass Bell': [0.4, 0.55], 'Chimes': [0.45, 0.55],
+      'Digital Piano': [0.05, 0.3], 'Fields Stab': [0.35, 0.25], 'Bright Brass': [0.05, 0.3] },
     bass: {}
   };
   function presetSpace(inst, name) {
@@ -694,7 +735,12 @@ section.show { display: flex; }
     'Rumba': { kick: 'X..x..x.X..x..x.', clave: 'x..x...x..x.x...', bongoHi: 'x.x...x.x.x...x.', bongoLo: '....x.......x.x.' },
     'Beguine': { kick: 'X...x...X...x...', bongoHi: 'X.xx.x.xX.xx.x.x', bongoLo: '....x.......x...', hat: 'x...x...x...x...' },
     'Space March': { kick: 'X...X...X...X...', snare: '....x.......x..x', hat: '..x...x...x...x.', cymbal: 'X...............' },
-    'Sixteens': { kick: 'X.......X.......', snare: '....X.......X...', hat: 'XxxxXxxxXxxxXxxx' }
+    'Sixteens': { kick: 'X.......X.......', snare: '....X.......X...', hat: 'XxxxXxxxXxxxXxxx' },
+    // In the manner of the records (two rhythm-box buttons held down together), not transcriptions.
+    'Oxygène 4 style': { kick: 'X.......X.....x.', snare: '....X.......X...', hat: 'x.xxx.xxx.xxx.xx', bongoHi: '......x.......x.' },
+    'Oxygène 6 style': { kick: 'X..xX.xxX..xX.xx', clave: 'x..x..xx..x.xx..', bongoHi: 'x.x...x.x.x...x.', bongoLo: '....x.......x.x.', hat: 'x.x.x.x.x.x.x.x.' },
+    'Équinoxe 5 style': { kick: 'X...x...X...x...', snare: '....X.......X...', hat: 'xxXxxxXxxxXxxxXx', clave: '..x...x...x...x.' },
+    'Slow Rock (straight)': { kick: 'X.....x.X.......', snare: '....X.......X...', hat: 'X.xxX.xxX.xxX.xx', cymbal: 'x...............' }
   };
 
   // ---- small helpers --------------------------------------------------------
@@ -1405,12 +1451,23 @@ section.show { display: flex; }
   var C = root.OxyCore;
   var OSC_TYPES = ['sawtooth', 'square', 'triangle', 'sine'];
   // Waves past the four built-in ones are drawn from their harmonics. Loudness relative to a saw, for the strings.
-  var WAVE_LEVEL = [1, 0.6, 1.0, 1.3, 0.8, 0.9];
+  var WAVE_LEVEL = [1, 0.6, 1.0, 1.3, 0.8, 0.9, 0.9, 0.9, 1.1];
+  var VOWELS = [[730, 1090, 2440], [320, 870, 2250], [280, 2250, 2900]];      // formants of aah, ooh, eee
   function customWave(ctx, idx) {
     var cache = ctx._oxyWaves || (ctx._oxyWaves = {});
     if (cache[idx]) return cache[idx];
-    var n = 32, re = new Float32Array(n), im = new Float32Array(n), k;
+    var sync = idx === 6 || idx === 7, n = sync ? 64 : 32, re = new Float32Array(n), im = new Float32Array(n), k;
     if (idx === 4) for (k = 1; k < n; k++) re[k] = Math.sin(k * Math.PI * 0.22) / k;          // narrow pulse: nasal, reedy
+    else if (idx === 8) [[1, 1], [4, 0.5], [7, 0.3], [11, 0.2], [16, 0.1]].forEach(function (h) { im[h[0]] = h[1]; });   // bell: far-apart partials
+    else if (sync) {
+      // Oscillator sync: a saw running `r` times faster than the note and restarted on every cycle of it. The result
+      // repeats once per note, so it can be drawn as one wave from its harmonics.
+      var r = idx === 6 ? 2.4 : 3.7, N = 2048, i, x, s;
+      for (i = 0; i < N; i++) {
+        x = i / N; s = (2 * ((r * x) % 1) - 1) * 2 / N;
+        for (k = 1; k < n; k++) { re[k] += s * Math.cos(2 * Math.PI * k * x); im[k] += s * Math.sin(2 * Math.PI * k * x); }
+      }
+    }
     else [1, 0.8, 0.55, 0.45, 0, 0.3, 0, 0.22].forEach(function (v, i) { im[i + 1] = v; });   // drawbar organ
     return (cache[idx] = ctx.createPeriodicWave(re, im));
   }
@@ -1475,6 +1532,7 @@ section.show { display: flex; }
     this.ctx = ctx;
     this.p = p || C.presetParams('lead');
     this.started = false;
+    this.bendC = 0;
     var o1 = this.o1 = ctx.createOscillator(), o2 = this.o2 = ctx.createOscillator(), sub = this.sub = ctx.createOscillator();
     sub.type = 'triangle';
     this.g1 = gain(ctx, 0.5); this.g2 = gain(ctx, 0.3); this.gs = gain(ctx, 0);
@@ -1501,7 +1559,7 @@ section.show { display: flex; }
     var t = Math.max(time || 0, this.ctx.currentTime), k = instant ? 0 : time ? 0.004 : 0.02;
     function set(param, v) { if (k) param.setTargetAtTime(v, t, k); else param.value = v; }
     if (this._wave !== (p.wave | 0)) { this._wave = p.wave | 0; setWave(this.ctx, this.o1, p.wave); setWave(this.ctx, this.o2, p.wave); }
-    set(this.o2.detune, p.detune + 100 * (p.pitch2 || 0));
+    set(this.o2.detune, p.detune + 100 * (p.pitch2 || 0) + this.bendC);
     var drive = p.drive || 0, wet = Math.min(1, drive * 5);
     set(this.dry.gain, 1 - wet);
     set(this.drvIn.gain, 1 + drive * 24);
@@ -1539,6 +1597,14 @@ section.show { display: flex; }
     this.filter.detune.setTargetAtTime(0, time, tc(this.p.release));
   };
 
+  // Pitch slide by hand, in cents, on top of whatever is playing.
+  MonoSynth.prototype.bend = function (c) {
+    var t = this.ctx.currentTime, p = this.p;
+    this.bendC = c;
+    this.o1.detune.setTargetAtTime(c, t, 0.012); this.sub.detune.setTargetAtTime(c, t, 0.012);
+    this.o2.detune.setTargetAtTime(p.detune + 100 * (p.pitch2 || 0) + c, t, 0.012);
+  };
+
   // One track of single notes (lead, bass). An oscillator's wave cannot be changed at a set time, so there is one synth
   // per wave in use, made when first needed; switching sound hands over to the synth with that sound's wave.
   function MonoTrack(ctx, out, level) {
@@ -1547,13 +1613,14 @@ section.show { display: flex; }
   }
   MonoTrack.prototype.setParams = function (p, instant, time) {
     var w = p.wave | 0, s = this.pool[w];
-    if (!s) s = this.pool[w] = new MonoSynth(this.ctx, this.out, this.level, p);
+    if (!s) { s = this.pool[w] = new MonoSynth(this.ctx, this.out, this.level, p); if (this.bendC) s.bend(this.bendC); }
     if (this.cur && this.cur !== s) this.cur.noteOff(time);
     this.cur = s; this.p = p;
     s.setParams(p, instant, time);
   };
   MonoTrack.prototype.noteOn = function (midi, time, vel) { this.cur.noteOn(midi, time, vel); };
   MonoTrack.prototype.noteOff = function (time) { this.cur.noteOff(time); };
+  MonoTrack.prototype.bend = function (c) { this.bendC = c; for (var w in this.pool) this.pool[w].bend(c); };
   MonoTrack.prototype.allOff = function () { for (var w in this.pool) this.pool[w].noteOff(0); };
 
   // The keyboard's sound of an instrument, as { params, echo, reverb } (older songs kept echo and reverb in the mix).
@@ -1571,6 +1638,7 @@ section.show { display: flex; }
     this._revSize = 0;
     this.sp = C.presetParams('strings');
     this.windLevel = 0;
+    this.sVoices = []; this.sBend = 0;           // sounding strings notes, and the pitch slide on them
 
     // master
     this.master = gain(ctx, 0.8);
@@ -1623,7 +1691,15 @@ section.show { display: flex; }
     this.sBus = gain(ctx, 1);
     var lp = this.sLp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 0.6; lp.frequency.value = 5200;
     var hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 110; hp.Q.value = 0.5;
-    this.sBus.connect(lp); lp.connect(hp);
+    // after the lowpass the sound goes on plain, or through three vowel formants (the choir), or a mix of both
+    this.sPlain = gain(ctx, 1); this.sVox = gain(ctx, 0); this.sForm = [];
+    this.sBus.connect(lp); lp.connect(this.sPlain); this.sPlain.connect(hp);
+    [1, 0.5, 0.3].forEach(function (lv, i) {
+      var bp = ctx.createBiquadFilter(), g = gain(ctx, lv);
+      bp.type = 'bandpass'; bp.Q.value = 7; bp.frequency.value = VOWELS[0][i];
+      lp.connect(bp); bp.connect(g); g.connect(this.sVox); this.sForm.push(bp);
+    }, this);
+    this.sVox.connect(hp);
 
     var ensL = gain(ctx, 1), ensR = gain(ctx, 1);
     this.ensDry = gain(ctx, 0.5); this.ensWet = gain(ctx, 0.75);
@@ -1685,6 +1761,9 @@ section.show { display: flex; }
     if (inst !== 'strings') return this[inst].setParams(p, instant, time);
     this.sp = p;
     set(this.sLp.frequency, p.bright);
+    var voice = p.voice || 0, vow = VOWELS[p.vowel | 0] || VOWELS[0];
+    set(this.sPlain.gain, 1 - 0.92 * voice); set(this.sVox.gain, 4 * voice * [1, 0.55, 1.5][p.vowel | 0]);      // evens out the loudness of the vowels
+    this.sForm.forEach(function (bp, i) { set(bp.frequency, vow[i]); });
     set(this.ensDry.gain, 0.8 - 0.45 * p.ensemble);
     set(this.ensWet.gain, 0.85 * p.ensemble);
     for (var i = 0; i < 2; i++) {
@@ -1734,10 +1813,10 @@ section.show { display: flex; }
   Engine.prototype.stringsOn = function (midi, time, vel) {
     var ctx = this.ctx, p = this.sp, f = C.midiToFreq(midi);
     time = Math.max(time || 0, ctx.currentTime);
-    var g = gain(ctx, 0), oscs = [];
+    var g = gain(ctx, 0), oscs = [], bend = this.sBend;
     function osc(freq, cents, level) {
       if (level <= 0.001) return;
-      var o = ctx.createOscillator(); setWave(ctx, o, p.wave); o.frequency.value = freq; o.detune.value = cents;
+      var o = ctx.createOscillator(); setWave(ctx, o, p.wave); o.frequency.value = freq; o._c = cents; o.detune.value = cents + bend;
       var og = gain(ctx, level * (WAVE_LEVEL[p.wave | 0] || 1)); o.connect(og); og.connect(g); o.start(time); oscs.push(o);
     }
     osc(f, -p.detune, 0.5); osc(f, p.detune, 0.5);
@@ -1746,7 +1825,9 @@ section.show { display: flex; }
     g.connect(this.sBus);
     g.gain.setValueAtTime(0, time);
     g.gain.setTargetAtTime(0.13 * (vel == null ? 1 : vel), time, tc(p.attack));
-    return { g: g, oscs: oscs, release: p.release };
+    var h = { g: g, oscs: oscs, release: p.release };
+    this.sVoices.push(h);
+    return h;
   };
   Engine.prototype.stringsOff = function (h, time) {
     if (!h || h.done) return;
@@ -1755,10 +1836,18 @@ section.show { display: flex; }
     h.g.gain.setTargetAtTime(0, time, tc(h.release));
     var end = time + h.release * 2.3 + 0.1;
     h.oscs.forEach(function (o) { o.stop(end); });
-    h.oscs[0].onended = function () { h.g.disconnect(); };
+    var self = this;
+    h.oscs[0].onended = function () { h.g.disconnect(); self.sVoices = self.sVoices.filter(function (v) { return v !== h; }); };
   };
   Engine.prototype.stringsNote = function (midi, time, dur, vel) {
     this.stringsOff(this.stringsOn(midi, time, vel), Math.max(time, this.ctx.currentTime) + dur);
+  };
+
+  Engine.prototype.bend = function (inst, cents) {
+    if (inst !== 'strings') return this[inst].bend(cents);
+    var t = this.ctx.currentTime;
+    this.sBend = cents;
+    this.sVoices.forEach(function (v) { v.oscs.forEach(function (o) { o.detune.setTargetAtTime(o._c + cents, t, 0.012); }); });
   };
 
   // ------------------------------------------------------------------ one-shots
@@ -1854,6 +1943,56 @@ section.show { display: flex; }
         g.gain.setValueAtTime(0, time); g.gain.setTargetAtTime(0.9, time, 0.3); g.gain.setTargetAtTime(0, time + 1.1, 0.35);
         o = this._noise(time, 2.8); o.connect(f); f.connect(g); g.connect(out);
         break;
+      case 'surf':                               // one wave running up the beach and back
+        f = this._filter('lowpass', 400, 0.8);
+        f.frequency.setValueAtTime(300, time); f.frequency.exponentialRampToValueAtTime(3200, time + 1.9);
+        f.frequency.exponentialRampToValueAtTime(350, time + 5);
+        g = ctx.createGain();
+        g.gain.setValueAtTime(0, time); g.gain.setTargetAtTime(0.4, time, 0.7); g.gain.setTargetAtTime(0, time + 2.1, 0.9);
+        this._noise(time, 6).connect(f); f.connect(g); g.connect(out);
+        break;
+      case 'rain':
+        f = this._filter('highpass', 3200, 0.5);
+        g = ctx.createGain();
+        g.gain.setValueAtTime(0, time); g.gain.setTargetAtTime(0.11, time, 0.25); g.gain.setTargetAtTime(0, time + 3.2, 0.4);
+        this._noise(time, 4.6).connect(f); f.connect(g); g.connect(out);
+        rnd = mulberry32(this._n++ + 11);
+        for (i = 0; i < 14; i++) {
+          t = time + rnd() * 3.4; base = 1800 + rnd() * 2600;
+          this._tone('sine', base, base * 0.6, 0.02, t, 0.03).connect(this._shot(t, 0.12, 0.025, out));
+        }
+        break;
+      case 'thunder':
+        f = this._filter('lowpass', 900, 0.7);
+        f.frequency.setValueAtTime(1400, time); f.frequency.exponentialRampToValueAtTime(90, time + 2.2);
+        g = ctx.createGain(); rnd = mulberry32(this._n++ + 23);
+        g.gain.setValueAtTime(0, time); g.gain.setTargetAtTime(0.9, time, 0.01);
+        for (i = 1; i < 6; i++) g.gain.setTargetAtTime(0.15 + rnd() * 0.6 * (1 - i / 7), time + i * 0.33 + rnd() * 0.1, 0.07);
+        g.gain.setTargetAtTime(0, time + 2.2, 0.5);
+        this._noise(time, 4.2).connect(f); f.connect(g); g.connect(out);
+        break;
+      case 'birds':
+        rnd = mulberry32(this._n++ + 31);
+        for (i = 0; i < 6; i++) {
+          t = time + i * 0.16 + rnd() * 0.08; base = 2400 + rnd() * 1800;
+          this._tone('sine', base, base * (rnd() < 0.5 ? 1.5 : 0.7), 0.07, t, 0.1).connect(this._shot(t, 0.4, 0.09, out));
+        }
+        break;
+      case 'bubbles':
+        rnd = mulberry32(this._n++ + 43);
+        for (i = 0; i < 9; i++) {
+          t = time + i * 0.13 + rnd() * 0.06; base = 160 + rnd() * 380;
+          this._tone('sine', base, base * 2, 0.07, t, 0.09).connect(this._shot(t, 0.4, 0.08, out));
+        }
+        break;
+      case 'rise':                               // a long climb into the next section
+        f = this._filter('lowpass', 300, 6);
+        f.frequency.setValueAtTime(300, time); f.frequency.exponentialRampToValueAtTime(9000, time + 3.4);
+        g = ctx.createGain();
+        g.gain.setValueAtTime(0.05, time); g.gain.exponentialRampToValueAtTime(0.5, time + 3.3);
+        g.gain.setTargetAtTime(0, time + 3.4, 0.04);
+        this._tone('sawtooth', 70, 1500, 3.4, time, 3.6).connect(f); f.connect(g); g.connect(out);
+        break;
     }
   };
 
@@ -1925,7 +2064,7 @@ section.show { display: flex; }
   // ------------------------------------------------------------------ state
   var song, undoSnap = null, engine = null, ctx = null, saveTimer = null, lastMsg = '', msgTimer = null;
   var ui = { tab: 'song', inst: 'strings', track: 'drums', clipId: {}, len: 2, hold: false, rec: false, wind: false,
-    base: { strings: 48, lead: 60, bass: 36 }, pos: 0, loopR: null, sel: null, zoom: 40, target: null, harp: false };
+    base: { strings: 48, lead: 60, bass: 36 }, pos: 0, loopR: null, sel: null, zoom: 40, target: null, harp: false, arp: 'off', arpRate: 1, arpOct: 1, bend: 0 };
   var tr = { on: false, step: 0, next: 0, timer: null, queue: [], vis: null, plan: null, done: false, endAt: 0 };
   var handles = {}, stack = [], recDown = {}, drag = null;
 
@@ -2167,8 +2306,55 @@ section.show { display: flex; }
     }
     keyLight(midi, false);
   }
-  function isSounding(midi) { return mono(ui.inst) ? stack[stack.length - 1] === midi : !!handles[midi]; }
+  function isSounding(midi) { return arp.held.indexOf(midi) >= 0 || (mono(ui.inst) ? stack[stack.length - 1] === midi : !!handles[midi]); }
+  // ---- arpeggiator: the held keys, played one after another in time with the song
+  var ARP_MODES = [{ v: 'off', label: 'Arp off' }, { v: 'up', label: 'Arp up' }, { v: 'down', label: 'Arp down' },
+    { v: 'updown', label: 'Arp up + down' }, { v: 'random', label: 'Arp random' }];
+  var arp = { held: [], i: 0, next: 0, count: 0, last: null };
+  function arpOn() { return ui.arp !== 'off'; }
+  function arpSeq() {
+    var a = arp.held.slice().sort(function (x, y) { return x - y; }), out = [], o, i;
+    for (o = 0; o < ui.arpOct; o++) for (i = 0; i < a.length; i++) if (a[i] + 12 * o <= 108) out.push(a[i] + 12 * o);
+    if (ui.arp === 'down') out.reverse();
+    if (ui.arp === 'updown' && out.length > 2) out = out.concat(out.slice(1, -1).reverse());
+    return out;
+  }
+  function arpNote(inst, m, t, dur, q) {
+    engine.useSound(inst, liveSnd(inst), 0);
+    if (mono(inst)) { engine[inst].noteOn(m, t, 1); engine[inst].noteOff(t + dur * 0.7); }
+    else engine.stringsNote(m, t, dur * 0.8);
+    arp.count++; arp.last = m;
+    if (q == null || !ui.rec || !tr.on) return;
+    var p = tr.plan;                           // while recording, the arpeggio is written into the part as it plays
+    if (p.loop && q >= p.to) q = p.from + (q - p.to) % (p.to - p.from);
+    if (q >= p.from) recWrite(inst, q, function (clip, local) { A.addNote(clip, local, m, ui.arpRate, mono(inst)); });
+  }
+  function arpTick() {
+    if (!arp.held.length || !engine) { arp.next = 0; return; }
+    var now = ctx.currentTime, sd = C.stepSeconds(song.bpm), rate = ui.arpRate;
+    if (!arp.next || arp.next < now - 0.25) { arp.next = now + 0.02; arp.i = 0; }
+    while (arp.next < now + 0.12) {
+      var t = arp.next, q = null;
+      if (tr.on && tr.vis) {                   // the song is running: stay on its steps
+        var k = Math.round((t - tr.vis.t) / sd);
+        while (mod(tr.vis.s + k, rate)) k++;
+        t = tr.vis.t + k * sd; q = tr.vis.s + k;
+      }
+      var seq = arpSeq(), m = ui.arp === 'random' ? seq[Math.floor(Math.random() * seq.length)] : seq[arp.i++ % seq.length];
+      arpNote(ui.inst, m, t, rate * sd, q);
+      arp.next = t + rate * sd;
+    }
+  }
+  function arpDrop(midi) { arp.held = arp.held.filter(function (m) { return m !== midi; }); keyLight(midi, false); }
+  setInterval(arpTick, 25);
+
   function keyDown(midi) {
+    if (arpOn()) {
+      var had = arp.held.indexOf(midi) >= 0;
+      if (ui.hold && had) return arpDrop(midi);
+      if (!had) { audio(); arp.held.push(midi); keyLight(midi, true); arpTick(); }
+      return;
+    }
     if (ui.hold) {
       if (isSounding(midi)) return soundOff(midi);
       if (mono(ui.inst)) stack.slice().forEach(function (m) { if (m !== midi) { stack = stack.filter(function (x) { return x !== m; }); keyLight(m, false); } });
@@ -2176,11 +2362,15 @@ section.show { display: flex; }
     }
     soundOn(midi);
   }
-  function keyUp(midi) { if (!ui.hold) soundOff(midi); }
+  function keyUp(midi) {
+    if (arpOn()) { if (!ui.hold) arpDrop(midi); return; }
+    if (!ui.hold) soundOff(midi);
+  }
   function releaseAll() {
     Object.keys(handles).forEach(function (m) { soundOff(+m); });
     stack.slice().reverse().forEach(function (m) { soundOff(m); });
     stack = []; recDown = {};
+    arp.held.slice().forEach(arpDrop);
     if (engine) { engine.lead.noteOff(0); engine.bass.noteOff(0); }
   }
   function restoreLive() {                   // after the sequencer let go of the mono synths, re-sound a held key
@@ -2364,7 +2554,7 @@ section.show { display: flex; }
   }
 
   // ------------------------------------------------------------------ PLAY tab
-  function setInst(inst) { releaseAll(); ui.inst = inst; save(); renderPlay(); }
+  function setInst(inst) { releaseAll(); if (engine) engine.bend(ui.inst, 0); ui.inst = inst; save(); renderPlay(); }
   function renderPlay() {
     var top = clear($('playtop')), inst = ui.inst, snd = song.sounds[inst];
     top.appendChild(el('div', { cls: 'row' }, [
@@ -2383,6 +2573,13 @@ section.show { display: flex; }
       soundSelect(inst, snd, function (n) { song.sounds[inst] = n; changed(); renderPlay(); }),
       btn('Edit sound', function () { openSound(inst, null); })
     ]));
+    var arow = [select(ARP_MODES, ui.arp, function (v) { releaseAll(); ui.arp = v; renderPlay(); })];
+    if (arpOn()) {
+      arow.push(select([{ v: 1, label: 'fast (1/16)' }, { v: 2, label: 'medium (1/8)' }, { v: 4, label: 'slow (1/4)' }], ui.arpRate, function (v) { ui.arpRate = +v; arp.next = 0; }));
+      arow.push(select([{ v: 1, label: '1 octave' }, { v: 2, label: '2 octaves' }, { v: 3, label: '3 octaves' }], ui.arpOct, function (v) { ui.arpOct = +v; }));
+    }
+    top.appendChild(el('div', { cls: 'row' }, arow));
+    if (arpOn()) top.appendChild(el('div', { cls: 'hint', text: 'Arp: hold two or more keys and they play one after another, in time with the tempo. With Hold on, tap keys to add them and tap again to take them out. ● records the running pattern.' }));
     if (ui.harp) top.appendChild(el('div', { cls: 'hint', text: 'Laser harp: touch a beam, or slide across them. The beams are the notes of the song\'s key and scale, so every one fits. Any sound can be played this way: pick another from the list.' }));
     if (mono(inst)) top.appendChild(el('div', { cls: 'hint', text: titleCase(inst) + ' plays one note at a time. For chords use Strings (it has organ sounds too).' }));
     top.appendChild(el('div', { cls: 'hint', text: '● records what you play onto the ' + titleCase(inst) + ' track at the playhead, after one bar of click. ' +
@@ -2454,6 +2651,29 @@ section.show { display: flex; }
     if (!black && m % 12 === 0) k.appendChild(document.createTextNode(C.noteName(m)));
     if (isSounding(m)) k.classList.add('down');
     return k;
+  }
+  // The pitch slide strip: drag away from the middle to bend the notes up or down (up to an octave at the ends),
+  // let go and the pitch returns.
+  function bindBend() {
+    var b = $('bend'), thumb = b.firstChild, on = null;
+    function set(e) {
+      var r = b.getBoundingClientRect(), u = clamp((e.clientX - r.left) / r.width * 2 - 1, -1, 1);
+      thumb.style.left = (50 + u * 46) + '%';
+      ui.bend = Math.round((u < 0 ? -1 : 1) * u * u * 1200);
+      audio().bend(ui.inst, ui.bend);
+    }
+    function end(e) {
+      if (on !== e.pointerId) return;
+      on = null; thumb.style.left = '50%'; ui.bend = 0;
+      if (engine) C.MELODIC.forEach(function (k) { engine.bend(k, 0); });
+    }
+    b.addEventListener('pointerdown', function (e) {
+      e.preventDefault(); on = e.pointerId;
+      try { b.setPointerCapture(e.pointerId); } catch (x) { /* synthetic pointers cannot be captured */ }
+      set(e);
+    });
+    b.addEventListener('pointermove', function (e) { if (on === e.pointerId) set(e); });
+    b.addEventListener('pointerup', end); b.addEventListener('pointercancel', end);
   }
   var pointers = {};
   function keyAt(x, y) {
@@ -2981,7 +3201,7 @@ section.show { display: flex; }
     repeatButton($('bpmDn'), function () { setBpm(song.bpm - 1); });
     repeatButton($('bpmUp'), function () { setBpm(song.bpm + 1); });
     $('grid').addEventListener('click', gridTap);
-    bindKeyboard(); bindTimeline();
+    bindKeyboard(); bindBend(); bindTimeline();
     var rz;
     window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(function () { if (ui.tab === 'play') renderKeys(); if (ui.tab === 'edit') renderGrid(); }, 120); });
     document.addEventListener('visibilitychange', function () { if (document.hidden) save(); });
@@ -2991,7 +3211,7 @@ section.show { display: flex; }
 
   window.OXY = {
     get song() { return song; }, get engine() { return engine; }, get ctx() { return ctx; }, ui: ui, tr: tr,
-    lib: lib, get songs() { return songs; }, guide: guide, start: start, stop: stop, setTab: setTab, keyDown: keyDown, keyUp: keyUp, audio: audio, undo: undo,
+    lib: lib, get songs() { return songs; }, guide: guide, start: start, stop: stop, setTab: setTab, keyDown: keyDown, keyUp: keyUp, audio: audio, undo: undo, arp: arp,
     load: function (o) { replaceSong(A.validate(o), 'Loaded'); }
   };
   init();
