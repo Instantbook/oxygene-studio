@@ -83,6 +83,7 @@ section.show { display: flex; }
 .gbody .tip { background: var(--panel); border-left: 3px solid var(--amber); border-radius: 6px; padding: 8px 10px; }
 .gtoc { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
 .gtoc button { font-size: 13px; padding: 8px 10px; min-height: 0; }
+.songrow button:first-child { flex: 1; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hint { color: var(--dim); font-size: 12px; margin: 4px 0; }
 
 .sliders { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px 14px; }
@@ -303,7 +304,13 @@ section.show { display: flex; }
 
     <h2 id="g-sound">SOUND: choose and build sounds</h2>
     <ul>
-      <li>Choose <b>Strings</b>, <b>Lead</b> or <b>Bass</b>, then pick a sound from the list. Each song remembers its own three sounds.</li>
+      <li>Choose <b>Strings</b>, <b>Lead</b> or <b>Bass</b>, then pick a sound from the list. This is the <b>keyboard’s
+        sound</b>: what you play by hand, and what a new part starts with.</li>
+      <li><b>Every part keeps its own sound.</b> A part takes the keyboard’s sound when it is made or recorded and holds on
+        to it, so changing the keyboard later does not change what is already in the song. To change a part, use its
+        <b>Sound</b> row (on EDIT, or under the timeline on SONG when the part is selected): pick another sound there, or press
+        <b>Edit sound</b>. SOUND then says <b>Part: …</b> at the top, every control changes that part only, and ▶ plays the
+        part so you hear it. <b>Keyboard sound</b> (or tapping the SOUND tab) goes back to the keyboard.</li>
       <li>The Lead list includes standards such as Piano, Electric Piano, Organ, Electric Guitar, Flute and Brass.
         They are synth versions, not recordings of the real instruments.</li>
       <li>Use the <b>note pads</b> at the bottom to hear the sound while you change it.</li>
@@ -352,6 +359,9 @@ section.show { display: flex; }
           <li><b>Make own copy</b>: turn this one into a separate part, so you can change it here (a variation)
             without changing the others.</li>
           <li><b>Remove</b>: take it off the timeline. The part itself is kept and can be placed again.</li>
+          <li><b>Sound</b> (Strings, Lead and Bass parts): the sound this part plays. Pick another from the list, or press
+            <b>Edit sound</b> to change its controls, echo and reverb. A part placed several times has one sound for all of
+            them; press <b>Make own copy</b> first to change just one.</li>
         </ul></li>
       <li><b>Wind</b> has no notes: tap its track to add a stretch of wind, drag the edge for the length.</li>
       <li><b>Playhead:</b> tap the row of bar numbers to choose where ▶ starts.</li>
@@ -374,6 +384,8 @@ section.show { display: flex; }
       <li><b>Drums:</b> each row is a drum. Tap once for a normal hit, again for a loud (accented) hit, a third time to clear.
         <b>Rhythm box…</b> fills the part with a ready-made rhythm you can then change.</li>
       <li><b>FX:</b> each row is a space effect; tap to fire it at that step.</li>
+      <li><b>Sound</b> (Bass, Strings, Lead): the sound this part plays. Pick another from the list right here, or press
+        <b>Edit sound</b> to change its controls, echo and reverb for this part only.</li>
       <li><b>▶</b> loops the part while you edit, so you hear every change.</li>
       <li><b>Clear</b> empties the part. <b>Delete</b> removes the part completely, from the timeline too. <b>Undo</b> brings either back.</li>
       <li>If a part is “Not on the timeline yet”, press <b>Add to the song</b> to place it after the last part on that track.</li>
@@ -381,22 +393,27 @@ section.show { display: flex; }
 
     <h2 id="g-mix">MIX: levels and space</h2>
     <ul>
-      <li>Each track has <b>Level</b> (loudness), <b>Pan</b> (left or right), <b>Echo</b> and <b>Reverb</b> (how much of it
-        goes to the effects), and <b>Mute</b>.</li>
+      <li>Each track has <b>Level</b> (loudness), <b>Pan</b> (left or right) and <b>Mute</b>. Drums and Effects also have
+        <b>Echo</b> and <b>Reverb</b> here (how much of them goes to the effects).</li>
+      <li>For Strings, Lead and Bass, echo and reverb belong to <b>each sound</b>, and every part keeps its own: change them
+        with the part’s <b>Sound</b> row → <b>Edit sound</b> → Echo and reverb.</li>
       <li><b>Tape echo and reverb</b> sets the effects themselves: echo time (counted in steps, so it stays in time with
         the tempo), how many repeats, how dull the repeats get, and the size and level of the reverb.</li>
       <li><b>Master</b> is the overall volume. <b>Wind level</b> sets how loud the wind is.</li>
     </ul>
-    <p class="tip">For the classic sound: plenty of Echo on the Lead, plenty of Reverb on the Strings, and keep the Bass
-      and Drums mostly dry.</p>
+    <p class="tip">For the classic sound: plenty of Echo on the lead sounds, plenty of Reverb on the strings, and keep the
+      bass and drums mostly dry.</p>
 
     <h2 id="g-file">FILE: name, key, save</h2>
     <ul>
       <li><b>Name</b> the song. <b>Key</b> and <b>scale</b> decide which notes get dots on the keyboard and rows in the
         editor. Notes you already wrote are not changed.</li>
-      <li>Your work is <b>saved automatically</b> in this browser, on this device.</li>
-      <li><b>Save song file</b> downloads the song as a file: a backup, or a way to move it to another device.
-        <b>Open song file</b> loads one.</li>
+      <li>The song on screen is <b>kept automatically</b> in this browser, on this device.</li>
+      <li><b>My songs</b> is your list of saved songs, newest first. <b>Save in My songs</b> puts the song there; tap a name
+        to open it again. Saving again under the same name replaces the earlier one, so change the name first to keep both.
+        <b>Delete</b> asks once more (“Sure?”) before removing a song from the list.</li>
+      <li><b>Save song file</b> downloads the song as a file: a backup, or a way to move it to another device. It also puts
+        the song in My songs. <b>Open song file</b> loads one.</li>
       <li><b>Whole song → WAV</b> makes an audio file of the whole timeline that any player can play.</li>
       <li><b>Start from</b> loads a demo. <b>New empty song</b> clears everything. <b>Undo</b> brings the previous song back.</li>
     </ul>
@@ -416,14 +433,19 @@ section.show { display: flex; }
       <dt>…fix one wrong note in a recording?</dt>
       <dd>On SONG, tap the recorded part → <b>Edit notes</b>, tap the wrong note to remove it and tap the right square.</dd>
       <dt>…change the sound of a track that is already written?</dt>
-      <dd>Pick another sound on PLAY or SOUND. The notes stay; only the sound changes.</dd>
+      <dd>Tap the part on SONG (or open it on EDIT) and pick another sound in its <b>Sound</b> row. The notes stay; only
+        that part’s sound changes. Picking a sound on PLAY changes the keyboard, not the parts already in the song.</dd>
+      <dt>…have the same notes with two different sounds?</dt>
+      <dd>Place the part again, select the new block, press <b>Make own copy</b>, then pick another sound in its Sound row.</dd>
+      <dt>…go back to a song I saved earlier?</dt>
+      <dd>FILE → <b>My songs</b> → tap its name.</dd>
       <dt>…make the whole piece longer?</dt>
       <dd>Just place parts further to the right. The timeline grows as you go, up to 256 bars.</dd>
       <dt>…undo a mistake?</dt>
       <dd>Press <b>Undo</b> (on SONG, EDIT or FILE). It takes back the last change only; pressing it again puts the change back.</dd>
       <dt>…move a song or my sounds to another phone?</dt>
-      <dd>Songs: <b>Save song file</b> here, <b>Open song file</b> there. The song carries its three sounds with it;
-        on the other device, open SOUND and press Save to add them to the list there.</dd>
+      <dd>Songs: <b>Save song file</b> here, <b>Open song file</b> there. The song carries the sounds of its parts with it;
+        on the other device, open a part’s <b>Edit sound</b> and press Save to add that sound to the list there.</dd>
     </dl>
 
     <h2 id="g-fix">Problems</h2>
@@ -431,7 +453,11 @@ section.show { display: flex; }
       <dt>No sound on an iPhone</dt>
       <dd>Switch off silent mode (the ring/silent switch on the side) and turn the volume up. Then tap a key.</dd>
       <dt>Every note has an echo I do not want</dt>
-      <dd>SOUND tab → scroll down to <b>Echo and reverb</b> → turn Echo down. (The same control is on MIX, under the track’s name.)</dd>
+      <dd>For what you play by hand: SOUND tab → scroll down to <b>Echo and reverb</b> → turn Echo down. For a part already
+        in the song: its Sound row → <b>Edit sound</b> → the same two controls.</dd>
+      <dt>I changed the sound but the song still plays the old one</dt>
+      <dd>PLAY and the SOUND tab set the keyboard’s sound. Parts already in the song keep theirs: change a part with its
+        <b>Sound</b> row on EDIT or SONG.</dd>
       <dt>No sound at all</dt>
       <dd>Sound starts after your first tap. Check MIX: Master is up, the track is not muted, its Level is up.</dd>
       <dt>▶ does nothing</dt>
@@ -1057,6 +1083,7 @@ section.show { display: flex; }
     delete s.patterns; delete s.chain; delete s.windOn;
     s.v = 3; s.clips = {}; s.tl = { wind: [] }; s.nextId = 1;
     TRACKS.forEach(function (t) { s.clips[t] = []; s.tl[t] = []; s.mix[t].mute = false; });
+    C.MELODIC.forEach(function (k) { s.sounds[k].echo = s.mix[k].echo; s.sounds[k].reverb = s.mix[k].reverb; });
     return s;
   }
 
@@ -1075,7 +1102,8 @@ section.show { display: flex; }
   function newClip(song, track, bars) {
     if (song.clips[track].length >= MAX_CLIPS) return null;
     var c = { id: song.nextId++, name: freeName(song, track), bars: CLIP_BARS.indexOf(bars) >= 0 ? bars : 1 };
-    if (isMel(track)) c.notes = []; else c.lanes = blankLanes(track, c.bars);
+    if (isMel(track)) { c.notes = []; c.snd = C.clone(song.sounds[track]); }   // a new part takes the keyboard's sound and keeps it
+    else c.lanes = blankLanes(track, c.bars);
     song.clips[track].push(c);
     return c;
   }
@@ -1196,7 +1224,8 @@ section.show { display: flex; }
   }
 
   // ---- what sounds on a step ----------------------------------------------------
-  function emptyEvents() { return { drums: [], fx: [], strings: [], lead: null, bass: null, wind: false }; }
+  // `snd` names the sound of each melodic track whose part starts a note on this step.
+  function emptyEvents() { return { drums: [], fx: [], strings: [], lead: null, bass: null, wind: false, snd: {} }; }
   function clipInto(ev, track, clip, local, maxLen) {
     if (!clip.notes) {
       laneIds(track).forEach(function (d) {
@@ -1207,7 +1236,7 @@ section.show { display: flex; }
     }
     var arr = clip.notes, i, n;
     if (track === 'strings') {
-      for (i = 0; i < arr.length; i++) if (arr[i].s === local) ev.strings.push({ m: arr[i].m, l: Math.min(arr[i].l, maxLen) });
+      for (i = 0; i < arr.length; i++) if (arr[i].s === local) { ev.strings.push({ m: arr[i].m, l: Math.min(arr[i].l, maxLen) }); ev.snd.strings = clip.snd; }
       return;
     }
     for (i = 0; i < arr.length; i++) {
@@ -1217,6 +1246,7 @@ section.show { display: flex; }
       for (var j = 0; j < arr.length; j++) if (arr[j].s > n.s && (!next || arr[j].s < next.s)) next = arr[j];
       var tied = !!next && next.s < n.s + n.l && next.s - n.s < maxLen;   // overlapping notes slur into each other
       ev[track] = { m: n.m, l: Math.min(n.l, maxLen), tied: tied };
+      ev.snd[track] = clip.snd;
       return;
     }
   }
@@ -1245,6 +1275,7 @@ section.show { display: flex; }
     var s = newSong();
     ['name', 'bpm', 'key', 'scale', 'wind'].forEach(function (k) { s[k] = b[k]; });
     s.sounds = C.clone(b.sounds); s.space = C.clone(b.space);
+    C.MELODIC.forEach(function (k) { s.sounds[k].echo = b.mix[k].echo; s.sounds[k].reverb = b.mix[k].reverb; });
     TRACKS.forEach(function (t) { s.mix[t] = C.clone(b.mix[t]); s.mix[t].mute = false; });
     s.mix.master = b.mix.master;
     return s;
@@ -1273,6 +1304,13 @@ section.show { display: flex; }
     if (s2.windOn && chain.length) s.tl.wind.push({ bar: 0, len: chain.length });
     return s;
   }
+  function unit(v, d) { v = Number(v); return isFinite(v) ? Math.max(0, Math.min(1, v)) : d; }
+  // A sound { preset, params, echo, reverb } made safe; whatever is missing comes from `base`.
+  function cleanSound(inst, src, base) {
+    src = src && typeof src === 'object' ? src : {};
+    return { preset: String(src.preset || base.preset).slice(0, 40), params: C.cleanParams(inst, src.params, base.params),
+      echo: unit(src.echo, base.echo), reverb: unit(src.reverb, base.reverb) };
+  }
   function whole(v, lo, hi) { v = Number(v); return v === Math.floor(v) && v >= lo && v <= hi ? v : null; }
   // Normalises anything loaded from a file or storage (either song format). Throws if it is not a song at all.
   function validate(o) {
@@ -1283,6 +1321,7 @@ section.show { display: flex; }
     for (k in o) shim[k] = o[k];
     shim.patterns = []; shim.chain = [];
     var s = common(C.validateSong(shim)), used = {};
+    C.MELODIC.forEach(function (k) { s.sounds[k] = cleanSound(k, o.sounds && o.sounds[k], s.sounds[k]); });
     TRACKS.forEach(function (t) {
       s.mix[t].mute = !!(o.mix && o.mix[t] && o.mix[t].mute);
       (Array.isArray(o.clips[t]) ? o.clips[t] : []).slice(0, MAX_CLIPS).forEach(function (c) {
@@ -1299,6 +1338,7 @@ section.show { display: flex; }
             clip.notes.push({ s: st, m: m, l: Math.max(1, Math.min(whole(n.l, 1, total) || 1, total - st)) });
           });
           sortNotes(clip.notes);
+          clip.snd = cleanSound(t, c.snd, s.sounds[t]);     // parts from before sounds were per part take the track's sound
         } else {
           clip.lanes = blankLanes(t, clip.bars);
           laneIds(t).forEach(function (d) {
@@ -1329,7 +1369,7 @@ section.show { display: flex; }
     removeClip: removeClip, setBars: setBars, addNote: addNote, toggleNote: toggleNote, rowsFor: rowsFor,
     applyRhythm: applyRhythm, clearClip: clearClip, clipEmpty: clipEmpty, at: at, fits: fits, freeLen: freeLen,
     place: place, unplace: unplace, songBars: songBars, recTarget: recTarget, emptyEvents: emptyEvents,
-    eventsAt: eventsAt, clipEvents: clipEvents, fromV2: fromV2, validate: validate
+    eventsAt: eventsAt, clipEvents: clipEvents, fromV2: fromV2, validate: validate, cleanSound: cleanSound
   };
   C.A = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
@@ -1420,10 +1460,10 @@ section.show { display: flex; }
   function gain(ctx, v) { var g = ctx.createGain(); g.gain.value = v; return g; }
 
   // ------------------------------------------------------------------ mono synth (lead, bass)
-  function MonoSynth(ctx, out, level) {
+  function MonoSynth(ctx, out, level, p) {
     this.level = level || 1;
     this.ctx = ctx;
-    this.p = C.presetParams('lead');
+    this.p = p || C.presetParams('lead');
     this.started = false;
     var o1 = this.o1 = ctx.createOscillator(), o2 = this.o2 = ctx.createOscillator(), sub = this.sub = ctx.createOscillator();
     sub.type = 'triangle';
@@ -1445,9 +1485,10 @@ section.show { display: flex; }
     o1.start(); o2.start(); sub.start();
     this.setParams(this.p, true);
   }
-  MonoSynth.prototype.setParams = function (p, instant) {
+  // `time` (optional) makes the change happen then instead of now, so a part can bring its own sound in mid-song.
+  MonoSynth.prototype.setParams = function (p, instant, time) {
     this.p = p;
-    var t = this.ctx.currentTime, k = instant ? 0 : 0.02;
+    var t = Math.max(time || 0, this.ctx.currentTime), k = instant ? 0 : time ? 0.004 : 0.02;
     function set(param, v) { if (k) param.setTargetAtTime(v, t, k); else param.value = v; }
     if (this._wave !== (p.wave | 0)) { this._wave = p.wave | 0; setWave(this.ctx, this.o1, p.wave); setWave(this.ctx, this.o2, p.wave); }
     set(this.o2.detune, p.detune + 100 * (p.pitch2 || 0));
@@ -1487,6 +1528,30 @@ section.show { display: flex; }
     this.amp.gain.setTargetAtTime(0, time, tc(this.p.release));
     this.filter.detune.setTargetAtTime(0, time, tc(this.p.release));
   };
+
+  // One track of single notes (lead, bass). An oscillator's wave cannot be changed at a set time, so there is one synth
+  // per wave in use, made when first needed; switching sound hands over to the synth with that sound's wave.
+  function MonoTrack(ctx, out, level) {
+    this.ctx = ctx; this.out = out; this.level = level || 1; this.pool = {}; this.cur = null;
+    this.setParams(C.presetParams('lead'), true);
+  }
+  MonoTrack.prototype.setParams = function (p, instant, time) {
+    var w = p.wave | 0, s = this.pool[w];
+    if (!s) s = this.pool[w] = new MonoSynth(this.ctx, this.out, this.level, p);
+    if (this.cur && this.cur !== s) this.cur.noteOff(time);
+    this.cur = s; this.p = p;
+    s.setParams(p, instant, time);
+  };
+  MonoTrack.prototype.noteOn = function (midi, time, vel) { this.cur.noteOn(midi, time, vel); };
+  MonoTrack.prototype.noteOff = function (time) { this.cur.noteOff(time); };
+  MonoTrack.prototype.allOff = function () { for (var w in this.pool) this.pool[w].noteOff(0); };
+
+  // The keyboard's sound of an instrument, as { params, echo, reverb } (older songs kept echo and reverb in the mix).
+  function kbSound(song, inst) {
+    var s = song.sounds[inst], m = song.mix[inst];
+    if (s.echo == null || s.reverb == null) return { params: s.params, echo: m.echo, reverb: m.reverb };
+    return s;
+  }
 
   // ------------------------------------------------------------------ engine
   function Engine(ctx) {
@@ -1536,8 +1601,9 @@ section.show { display: flex; }
     }, this);
 
     this._buildStrings();
-    this.lead = new MonoSynth(ctx, this.ch.lead.input);
-    this.bass = new MonoSynth(ctx, this.ch.bass.input, 1.6);
+    this.lead = new MonoTrack(ctx, this.ch.lead.input);
+    this.bass = new MonoTrack(ctx, this.ch.bass.input, 1.6);
+    this.cur = {};                               // the sound each melodic track has now
     this._buildWind();
   }
 
@@ -1599,14 +1665,38 @@ section.show { display: flex; }
     src.start();
   };
 
-  // Pushes every mix / space / sound setting of the song into the graph. Cheap; call on any slider move.
-  Engine.prototype.apply = function (song, instant) {
+  // Gives a melodic track a sound { params, echo, reverb }: now, or at `time`. Every part carries its own sound, so
+  // this is called whenever a part with another sound starts.
+  Engine.prototype.setSound = function (inst, snd, time, instant) {
+    var t = Math.max(time || 0, this.ctx.currentTime), k = instant ? 0 : time ? 0.004 : 0.03, s = this.ch[inst], p = snd.params;
+    function set(param, v) { if (k) param.setTargetAtTime(v, t, k); else param.value = v; }
+    this.cur[inst] = snd;
+    set(s.echo.gain, snd.echo); set(s.rev.gain, snd.reverb);
+    if (inst !== 'strings') return this[inst].setParams(p, instant, time);
+    this.sp = p;
+    set(this.sLp.frequency, p.bright);
+    set(this.ensDry.gain, 0.8 - 0.45 * p.ensemble);
+    set(this.ensWet.gain, 0.85 * p.ensemble);
+    for (var i = 0; i < 2; i++) {
+      set(this.phLfo[i].frequency, p.phRate);
+      set(this.phAmt[i].gain, 2400 * p.phDepth);
+      set(this.phDry[i].gain, 1 - 0.5 * p.phMix);
+      set(this.phWet[i].gain, 0.5 * p.phMix);
+    }
+  };
+  Engine.prototype.useSound = function (inst, snd, time) { if (snd && this.cur[inst] !== snd) this.setSound(inst, snd, time); };
+
+  // Pushes every mix / space setting of the song into the graph, and the sounds: `sounds` says which sound each melodic
+  // track has right now (left out: the keyboard's). Cheap; call on any slider move.
+  Engine.prototype.apply = function (song, instant, sounds) {
     var t = this.ctx.currentTime, k = instant ? 0 : 0.03;
     function set(param, v) { if (k) param.setTargetAtTime(v, t, k); else param.value = v; }
     C.CHANNELS.forEach(function (id) {
       var m = song.mix[id], s = this.ch[id];
-      set(s.input.gain, m.level); set(s.pan.pan, m.pan); set(s.echo.gain, m.echo); set(s.rev.gain, m.reverb);
+      set(s.input.gain, m.level); set(s.pan.pan, m.pan);
+      if (C.MELODIC.indexOf(id) < 0) { set(s.echo.gain, m.echo); set(s.rev.gain, m.reverb); }
     }, this);
+    C.MELODIC.forEach(function (id) { this.setSound(id, (sounds && sounds[id]) || kbSound(song, id), 0, instant); }, this);
     set(this.master.gain, song.mix.master);
 
     var sp = song.space, dt = sp.echoSteps * C.stepSeconds(song.bpm);
@@ -1617,18 +1707,6 @@ section.show { display: flex; }
     var size = Math.round(sp.revSize * 10) / 10;
     if (size !== this._revSize) { this._revSize = size; this.conv.buffer = makeImpulse(this.ctx, size, 310); }
 
-    var p = this.sp = song.sounds.strings.params;
-    set(this.sLp.frequency, p.bright);
-    set(this.ensDry.gain, 0.8 - 0.45 * p.ensemble);
-    set(this.ensWet.gain, 0.85 * p.ensemble);
-    for (var i = 0; i < 2; i++) {
-      set(this.phLfo[i].frequency, p.phRate);
-      set(this.phAmt[i].gain, 2400 * p.phDepth);
-      set(this.phDry[i].gain, 1 - 0.5 * p.phMix);
-      set(this.phWet[i].gain, 0.5 * p.phMix);
-    }
-    this.lead.setParams(song.sounds.lead.params, instant);
-    this.bass.setParams(song.sounds.bass.params, instant);
     this.windAmt = song.wind;
     this.windLevel = this.windOn ? song.wind : 0;
     if (k) this.windGain.gain.setTargetAtTime(this.windLevel, t, 0.4); else this.windGain.gain.value = this.windLevel;
@@ -1773,7 +1851,8 @@ section.show { display: flex; }
   // Starts everything that begins on one step: `ev` comes from OxyCore.A.eventsAt / clipEvents. Shared by the live
   // transport and the offline renderer.
   Engine.prototype.playEvents = function (ev, time, stepDur) {
-    var self = this;
+    var self = this, snd = ev.snd || {};
+    C.MELODIC.forEach(function (k) { self.useSound(k, snd[k], time); });
     ev.drums.forEach(function (d) { self.drum(d[0], time, d[1] === 2); });
     ev.fx.forEach(function (id) { self.fx(id, time); });
     ev.strings.forEach(function (n) { self.stringsNote(n.m, time, n.l * stepDur); });
@@ -1787,7 +1866,7 @@ section.show { display: flex; }
   };
 
   Engine.prototype.allOff = function () {
-    this.lead.noteOff(0); this.bass.noteOff(0);
+    this.lead.allOff(); this.bass.allOff();
   };
 
   // Renders steps [from, from + count) of the song's timeline to a stereo AudioBuffer, with a tail for echo and reverb.
@@ -1805,6 +1884,7 @@ section.show { display: flex; }
   };
 
   Engine.MonoSynth = MonoSynth;
+  Engine.kbSound = kbSound;
   root.OxyEngine = Engine;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -1835,7 +1915,7 @@ section.show { display: flex; }
   // ------------------------------------------------------------------ state
   var song, undoSnap = null, engine = null, ctx = null, saveTimer = null, lastMsg = '', msgTimer = null;
   var ui = { tab: 'song', inst: 'strings', track: 'drums', clipId: {}, len: 2, hold: false, rec: false, wind: false,
-    base: { strings: 48, lead: 60, bass: 36 }, pos: 0, loopR: null, sel: null, zoom: 40 };
+    base: { strings: 48, lead: 60, bass: 36 }, pos: 0, loopR: null, sel: null, zoom: 40, target: null };
   var tr = { on: false, step: 0, next: 0, timer: null, queue: [], vis: null, plan: null, done: false, endAt: 0 };
   var handles = {}, stack = [], recDown = {}, drag = null;
 
@@ -1862,7 +1942,28 @@ section.show { display: flex; }
       } catch (e) { /* private mode or full: the song still lives in memory */ }
     }, 400);
   }
-  function changed() { if (engine) engine.apply(song); save(); }
+  function changed() { if (engine) engine.apply(song, false, nowSounds()); save(); }
+  // Every melodic part carries its own sound; the keyboard has one per instrument (song.sounds). The SOUND tab edits
+  // the keyboard's sound, or, when opened from a part, that part's (ui.target).
+  function targetClip() {
+    var t = ui.target, c = t && A.getClip(song, t.track, t.id);
+    if (t && !c) ui.target = null;
+    return c || null;
+  }
+  function liveSnd(inst) {                   // what a key press plays
+    var c = ui.tab === 'sound' && ui.target && ui.target.track === inst ? targetClip() : null;
+    return c ? c.snd : song.sounds[inst];
+  }
+  function nowSounds() {                     // the sound each melodic track has at this moment
+    var out = {}, step = tr.on ? (tr.vis ? tr.vis.s : tr.step) : -1, p = tr.plan;
+    C.MELODIC.forEach(function (inst) {
+      var clip = null, pl;
+      if (step >= 0 && p.mode === 'solo') clip = p.track === inst ? p.clip : null;
+      else if (step >= 0 && !song.mix[inst].mute) { pl = A.at(song, inst, Math.floor(step / S)); clip = pl && A.getClip(song, inst, pl.c); }
+      out[inst] = clip ? clip.snd : liveSnd(inst);
+    });
+    return out;
+  }
   function snapshot() { undoSnap = JSON.stringify(song); }
   function undo() {
     if (!undoSnap) return status('Nothing to undo');
@@ -1885,7 +1986,7 @@ section.show { display: flex; }
       var AC = window.AudioContext || window.webkitAudioContext;
       ctx = new AC({ latencyHint: 'interactive' });
       engine = new OxyEngine(ctx);
-      engine.apply(song, true);
+      engine.apply(song, true, nowSounds());
     }
     if (ctx.state !== 'running') ctx.resume();
     return engine;
@@ -1903,14 +2004,18 @@ section.show { display: flex; }
   }
   // What Play plays: in the editor the part being edited (with the rest of the song when it is on the timeline,
   // alone when it is not), elsewhere the song from the playhead or the loop region.
+  function editing() {                       // the part Play loops: the one in the editor, or the one whose sound is being set
+    var c;
+    if (ui.tab === 'edit') { c = curClip(); return c ? { track: ui.track, clip: c } : null; }
+    if (ui.tab === 'sound') { c = targetClip(); return c ? { track: ui.target.track, clip: c } : null; }
+    return null;
+  }
   function plan() {
-    if (ui.tab === 'edit') {
-      var clip = curClip();
-      if (clip) {
-        var pl = placementOf(ui.track, clip);
-        if (pl) return { mode: 'song', from: pl.bar * S, to: (pl.bar + Math.min(pl.len, clip.bars)) * S, loop: true };
-        return { mode: 'solo', track: ui.track, clip: clip, from: 0, to: clip.bars * S, loop: true };
-      }
+    var ed = editing();
+    if (ed) {
+      var clip = ed.clip, pl = placementOf(ed.track, clip);
+      if (pl) return { mode: 'song', from: pl.bar * S, to: (pl.bar + Math.min(pl.len, clip.bars)) * S, loop: true };
+      return { mode: 'solo', track: ed.track, clip: clip, from: 0, to: clip.bars * S, loop: true };
     }
     var end = A.songBars(song) * S;
     if (ui.loopR) return { mode: 'song', from: ui.loopR.from * S, to: ui.loopR.to * S, loop: true };
@@ -1948,7 +2053,11 @@ section.show { display: flex; }
   function stop() {
     if (!tr.on) return;
     tr.on = false; clearInterval(tr.timer); tr.queue = []; tr.vis = null;
-    if (engine) { engine.allOff(); engine.setWind(ui.wind, 0); restoreLive(); }
+    if (engine) {
+      engine.allOff(); engine.setWind(ui.wind, 0);
+      C.MELODIC.forEach(function (k) { engine.useSound(k, liveSnd(k), 0); });
+      restoreLive();
+    }
     $('play').classList.remove('on'); $('play').textContent = '▶';
     showPosition(); placeHeads();
     if (ui.rec && ui.tab === 'song') renderTimeline();
@@ -2025,6 +2134,7 @@ section.show { display: flex; }
   // ------------------------------------------------------------------ playing by hand
   function soundOn(midi) {
     var e = audio(), inst = ui.inst;
+    e.useSound(inst, liveSnd(inst), 0);
     if (mono(inst)) { stack = stack.filter(function (m) { return m !== midi; }); stack.push(midi); e[inst].noteOn(midi, 0, 1); }
     else if (!handles[midi]) handles[midi] = e.stringsOn(midi, 0, 1);
     var r = recPos();
@@ -2140,21 +2250,20 @@ section.show { display: flex; }
   function pick(list, name) { return list.filter(function (x) { return x.name === name; })[0] || null; }
   function builtIn(inst, name) { return pick(C.PRESETS[inst], name); }
   function mine(inst, name) { return pick(lib[inst], name); }
-  function useSound(inst, name) {
-    var u = mine(inst, name);
-    if (u) song.sounds[inst] = { preset: u.name, params: C.clone(u.p) }; else C.setPreset(song, inst, name);
-    var fx = fxOf(inst, name);             // the sound brings its own echo and reverb with it
-    if (fx) { song.mix[inst].echo = fx.echo; song.mix[inst].reverb = fx.reverb; }
-    changed();
+  // A named sound as a part or the keyboard holds it. It brings its own echo and reverb; one saved before sounds had
+  // them keeps the amounts of `old`, the sound it replaces.
+  function makeSnd(inst, name, old) {
+    var ref = mine(inst, name) || builtIn(inst, name), fx = fxOf(inst, name) || old;
+    if (!ref) return C.clone(old);
+    return { preset: ref.name, params: C.clone(ref.p), echo: fx.echo, reverb: fx.reverb };
   }
-  function isEdited(inst) {                  // have the controls been moved away from the named sound?
-    var snd = song.sounds[inst], ref = mine(inst, snd.preset) || builtIn(inst, snd.preset);
-    var fx = fxOf(inst, snd.preset), m = song.mix[inst];
-    if (fx && (Math.abs(fx.echo - m.echo) > 1e-6 || Math.abs(fx.reverb - m.reverb) > 1e-6)) return true;
+  function isEdited(inst, snd) {             // have the controls been moved away from the named sound?
+    var ref = mine(inst, snd.preset) || builtIn(inst, snd.preset), fx = fxOf(inst, snd.preset);
+    if (fx && (Math.abs(fx.echo - snd.echo) > 1e-6 || Math.abs(fx.reverb - snd.reverb) > 1e-6)) return true;
     return !ref || C.PARAMS[inst].some(function (d) { return Math.abs(ref.p[d.id] - snd.params[d.id]) > 1e-6 * Math.max(1, Math.abs(ref.p[d.id])); });
   }
-  function soundSelect(inst, after) {
-    var cur = song.sounds[inst].preset, s = el('select', { css: 'flex:1', onchange: function () { useSound(inst, s.value); after(); } });
+  function soundSelect(inst, snd, pick) {    // pick(sound) gets the chosen sound, ready to store
+    var cur = snd.preset, s = el('select', { css: 'flex:1;min-width:0', onchange: function () { pick(makeSnd(inst, s.value, snd)); } });
     function group(label, list) {
       if (!list.length) return;
       s.appendChild(el('optgroup', { label: label }, list.map(function (x) { return el('option', { value: x.name, text: x.name }); })));
@@ -2164,37 +2273,61 @@ section.show { display: flex; }
     s.value = cur;
     return s;
   }
+  function openSound(track, clip) { ui.target = clip ? { track: track, id: clip.id } : null; if (clip) ui.inst = track; setTab('sound'); $('soundbody').scrollTop = 0; }
+  // The "Sound" row of one part, on the EDIT tab and under the timeline.
+  function soundRow(track, clip, after) {
+    return el('div', { cls: 'row' }, [
+      el('span', { cls: 'hint', text: 'Sound' }),
+      soundSelect(track, clip.snd, function (n) {
+        snapshot(); clip.snd = n; changed(); after();
+        var times = song.tl[track].filter(function (p) { return p.c === clip.id; }).length;
+        status(times > 1 ? clip.name + ' is on the timeline ' + times + ' times: all of them now play ' + n.preset + '. To change one only, tap it on SONG and "Make own copy" first.'
+          : clip.name + ' now plays ' + n.preset);
+      }),
+      btn('Edit sound', function () { openSound(track, clip); })
+    ]);
+  }
 
   // ------------------------------------------------------------------ SOUND tab: the programmer
   function renderSound() {
-    var body = clear($('soundbody')), inst = ui.inst, snd = song.sounds[inst], groups = [], byName = {};
+    var part = targetClip(), inst = part ? (ui.inst = ui.target.track) : ui.inst;
+    var body = clear($('soundbody')), snd = part ? part.snd : song.sounds[inst], groups = [], byName = {};
     var mark = el('span', { cls: 'hint' });
-    function showMark() { mark.textContent = isEdited(inst) ? 'changed, not saved' : ''; }
+    function showMark() { mark.textContent = isEdited(inst, snd) ? 'changed, not saved' : ''; }
+    function put(n) { if (part) { snapshot(); part.snd = n; } else song.sounds[inst] = n; changed(); renderSound(); }
     body.appendChild(el('div', { cls: 'row' }, [
       seg(C.MELODIC.map(function (k) { return { v: k, label: titleCase(k) }; }), function (v) { return v === inst; },
-        function (v) { releaseAll(); ui.inst = v; save(); renderSound(); })
+        function (v) { if (tr.on && part) stop(); releaseAll(); ui.target = null; ui.inst = v; save(); renderSound(); })
     ]));
+    if (part) {
+      body.appendChild(el('div', { cls: 'row', id: 'soundwho' }, [
+        el('span', { css: 'flex:1' }, [el('b', { text: 'Part: ' + part.name }), document.createTextNode(' · changes here are for this part only. ▶ plays it.')]),
+        btn('Keyboard sound', function () { if (tr.on) stop(); releaseAll(); ui.target = null; renderSound(); })
+      ]));
+    } else {
+      body.appendChild(el('div', { cls: 'hint', id: 'soundwho', text: 'The keyboard\u2019s ' + titleCase(inst) + ' sound: what you play by hand, and what a new part starts with. ' +
+        'Parts already in the song keep their own sound; change one with its Sound row on EDIT.' }));
+    }
     body.appendChild(el('div', { cls: 'row' }, [
-      soundSelect(inst, renderSound),
-      btn('Revert', function () { useSound(inst, snd.preset); renderSound(); })
+      soundSelect(inst, snd, put),
+      btn('Revert', function () { put(makeSnd(inst, snd.preset, snd)); })
     ]));
     C.PARAMS[inst].forEach(function (d) {
       if (!byName[d.g]) { byName[d.g] = []; groups.push(d.g); }
       byName[d.g].push(slider(d, function () { return snd.params[d.id]; }, function (v) { snd.params[d.id] = d.choices || d.step === 1 ? Math.round(v) : v; showMark(); }));
     });
     groups.forEach(function (g) { body.appendChild(card(g, [el('div', { cls: 'sliders' }, byName[g])])); });
-    var mx = song.mix[inst];
     body.appendChild(card('Echo and reverb', [el('div', { cls: 'sliders' }, ['echo', 'reverb'].map(function (id) {
-      return slider({ id: id, label: titleCase(id), min: 0, max: 1, step: 0.01 }, function () { return mx[id]; }, function (v) { mx[id] = v; showMark(); });
-    })), el('div', { cls: 'hint', text: 'How much of this sound goes to the tape echo and the reverb. 0 is dry. Every sound brings its own amounts; '
-      + 'the same two controls are on the MIX tab.' })]));
+      return slider({ id: id, label: titleCase(id), min: 0, max: 1, step: 0.01 }, function () { return snd[id]; }, function (v) { snd[id] = v; showMark(); });
+    })), el('div', { cls: 'hint', text: 'How much of this sound goes to the tape echo and the reverb. 0 is dry. Every sound brings its own amounts, '
+      + 'and every part keeps its own.' })]));
     var own = mine(inst, snd.preset);
     var name = el('input', { type: 'text', maxLength: 40, css: 'flex:1;min-width:0', placeholder: 'Name for your sound', value: own ? own.name : '' });
     var acts = [name, btn('Save', function () {
       var n = name.value.trim();
       if (!n) return status('Give the sound a name first');
       if (builtIn(inst, n)) return status('"' + n + '" is a built-in sound: pick another name');
-      var had = mine(inst, n), p = C.cleanParams(inst, snd.params), fx = { echo: song.mix[inst].echo, reverb: song.mix[inst].reverb };
+      var had = mine(inst, n), p = C.cleanParams(inst, snd.params), fx = { echo: snd.echo, reverb: snd.reverb };
       if (had) { had.p = p; had.fx = fx; } else lib[inst].unshift({ name: n, p: p, fx: fx });
       snd.preset = n; save();
       status(saveLib() ? (had ? 'Updated "' : 'Saved "') + n + '" in your ' + titleCase(inst) + ' sounds' : 'This browser would not store it; it stays in the song only');
@@ -2206,7 +2339,7 @@ section.show { display: flex; }
     }, 'warn'));
     body.appendChild(card('Keep it as your own sound', [
       el('div', { cls: 'row' }, acts), mark, statusEl(),
-      el('div', { cls: 'hint', text: 'Your sounds are kept in this browser and show up first in the list, in every song. A song file also carries its own three sounds.' })
+      el('div', { cls: 'hint', text: 'Your sounds are kept in this browser and show up first in the list, in every song. A song also carries the sounds of its parts with it.' })
     ]));
     showMark();
     var pads = clear($('soundpads')), base = ui.base[inst];
@@ -2237,8 +2370,8 @@ section.show { display: flex; }
       } });
     }))));
     top.appendChild(el('div', { cls: 'row' }, [
-      soundSelect(inst, renderPlay),
-      btn('Edit sound', function () { setTab('sound'); })
+      soundSelect(inst, snd, function (n) { song.sounds[inst] = n; changed(); renderPlay(); }),
+      btn('Edit sound', function () { openSound(inst, null); })
     ]));
     if (mono(inst)) top.appendChild(el('div', { cls: 'hint', text: titleCase(inst) + ' plays one note at a time. For chords use Strings (it has organ sounds too).' }));
     top.appendChild(el('div', { cls: 'hint', text: '● records what you play onto the ' + titleCase(inst) + ' track at the playhead, after one bar of click. ' +
@@ -2420,6 +2553,7 @@ section.show { display: flex; }
       }
       acts.push(btn('Remove', function () { snapshot(); A.unplace(song, ln, pl); ui.sel = null; save(); renderTimeline(); }, 'warn'));
       bar.appendChild(el('div', { cls: 'row' }, acts));
+      if (clip && clip.snd) bar.appendChild(soundRow(ln, clip, renderTlBar));
     }
     bar.appendChild(statusEl());
   }
@@ -2515,6 +2649,7 @@ section.show { display: flex; }
         status(clip.name + ' deleted, also from the timeline (Undo brings it back)');
       }, 'warn'));
       top.appendChild(tools);
+      if (melodic) top.appendChild(soundRow(track, clip, renderEdit));
       if (!placementOf(track, clip)) {
         top.appendChild(el('div', { cls: 'row' }, [el('span', { cls: 'hint', text: 'Not on the timeline yet.', css: 'flex:1' }), btn('Add to the song', function () {
           var arr = song.tl[track], bar = arr.length ? arr[arr.length - 1].bar + arr[arr.length - 1].len : 0;
@@ -2586,6 +2721,7 @@ section.show { display: flex; }
       clip.lanes[row.id][s] = clip.lanes[row.id][s] ? 0 : 1;
       if (clip.lanes[row.id][s]) eng.fx(row.id, 0);
     } else if (A.toggleNote(clip, s, row.m, ui.len, mono(track))) {
+      eng.useSound(track, clip.snd, 0);
       if (track === 'strings') eng.stringsNote(row.m, 0, 0.45);
       else if (!tr.on) { eng[track].noteOn(row.m, 0, 1); eng[track].noteOff(ctx.currentTime + 0.22); }
     }
@@ -2611,9 +2747,57 @@ section.show { display: flex; }
       }).catch(function (e) { status('Export failed: ' + e.message); });
     }, 30);
   }
+  // My songs: saved songs kept in this browser, newest first, so they can be opened again with one tap.
+  var SONGS = 'oxygene-studio-songs', MAX_SONGS = 40, songs = [], sure = null;
+  function loadSongs() {
+    try {
+      var raw = JSON.parse(localStorage.getItem(SONGS) || '[]');
+      songs = (Array.isArray(raw) ? raw : []).filter(function (x) { return x && x.song && typeof x.name === 'string'; }).slice(0, MAX_SONGS);
+    } catch (e) { songs = []; }
+  }
+  function storeSongs(next) {
+    try { localStorage.setItem(SONGS, JSON.stringify(next)); songs = next; return true; } catch (e) { return false; }
+  }
+  function keepSong() {                      // a song saved again under the same name replaces the earlier one
+    var name = song.name;
+    return storeSongs([{ name: name, t: Date.now(), song: JSON.parse(JSON.stringify(song)) }]
+      .concat(songs.filter(function (x) { return x.name !== name; })).slice(0, MAX_SONGS));
+  }
+  function when(t) {
+    var d = new Date(t), M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return d.getDate() + ' ' + M[d.getMonth()] + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  }
+  function songsCard() {
+    var kids = [el('div', { cls: 'row' }, [btn('Save in My songs', function () {
+      var had = songs.some(function (x) { return x.name === song.name; });
+      status(keepSong() ? '"' + song.name + '" ' + (had ? 'updated' : 'saved') + ' in My songs' : 'This browser would not store it. Use "Save song file" instead.');
+      renderFile();
+    }, 'on')])];
+    songs.forEach(function (x) {
+      kids.push(el('div', { cls: 'row songrow' }, [
+        btn(x.name, function () {
+          try {
+            var next = A.validate(JSON.parse(JSON.stringify(x.song)));
+            storeSongs([x].concat(songs.filter(function (y) { return y !== x; })));
+            replaceSong(next, 'Opened "' + x.name + '" (Undo brings back what was here)');
+          } catch (e) { status(e.message || 'Could not open that song'); }
+        }),
+        el('span', { cls: 'hint', text: when(x.t) }),
+        btn(sure === x ? 'Sure?' : 'Delete', function () {
+          if (sure !== x) { sure = x; renderFile(); return; }
+          sure = null; storeSongs(songs.filter(function (y) { return y !== x; }));
+          status('"' + x.name + '" deleted from My songs'); renderFile();
+        }, 'warn')
+      ]));
+    });
+    kids.push(statusEl());
+    kids.push(el('div', { cls: 'hint', text: songs.length ? 'Tap a name to open it. These are kept in this browser on this device; saving again under the same name ' +
+      'replaces the earlier one, so change the name above to keep both.' : 'Nothing saved yet. Saved songs are listed here, newest first, so you can go back to them with one tap.' }));
+    return card('My songs', kids);
+  }
   function replaceSong(next, msg) {
     snapshot(); stop(); releaseAll();
-    song = next; ui.sel = null; ui.pos = 0; ui.loopR = null; ui.clipId = {};
+    song = next; ui.sel = null; ui.pos = 0; ui.loopR = null; ui.clipId = {}; ui.target = null; sure = null;
     changed(); renderAll(); status(msg);
   }
   function renderFile() {
@@ -2627,6 +2811,7 @@ section.show { display: flex; }
       ]),
       el('div', { cls: 'hint', text: 'Key and scale choose the dots on the keyboard and the rows in the editor. Notes already written stay as they are.' })
     ]));
+    body.appendChild(songsCard());
     var file = el('input', { type: 'file', accept: '.json,application/json', css: 'display:none', onchange: function () {
       var f = file.files[0]; if (!f) return;
       var rd = new FileReader();
@@ -2636,10 +2821,13 @@ section.show { display: flex; }
       };
       rd.readAsText(f);
     } });
-    body.appendChild(card('Save and export', [
+    body.appendChild(card('Files', [
       el('div', { cls: 'row' }, [
         btn('Whole song → WAV', exportWav),
-        btn('Save song file', function () { download(fileName('.json'), new Blob([JSON.stringify(song)], { type: 'application/json' })); status('Song file saved'); }),
+        btn('Save song file', function () {
+          download(fileName('.json'), new Blob([JSON.stringify(song)], { type: 'application/json' }));
+          status(keepSong() ? 'Song file saved, and kept in My songs' : 'Song file saved'); renderFile();
+        }),
         btn('Open song file', function () { file.click(); }), file
       ]),
       statusEl()
@@ -2652,7 +2840,7 @@ section.show { display: flex; }
         btn('New empty song', function () { replaceSong(A.newSong(), 'New song (Undo brings the old one back)'); }, 'warn'),
         btn('Undo', undo)
       ]),
-      el('div', { cls: 'hint', text: 'Your work is kept in this browser automatically. Save a song file to move it or keep a copy.' })
+      el('div', { cls: 'hint', text: 'The song on screen is kept in this browser automatically. Save it in My songs to come back to it later; save a song file to move it to another device or keep a copy.' })
     ]));
   }
 
@@ -2667,8 +2855,9 @@ section.show { display: flex; }
     A.TRACKS.forEach(function (c) {
       var m = song.mix[c];
       g.appendChild(card(c === 'fx' ? 'Effects and wind' : titleCase(c), [
-        el('div', { cls: 'sliders' }, MIX_SL.map(function (d) { return objSlider(d, m); })),
-        el('div', { cls: 'row' }, [btn(m.mute ? 'Muted' : 'Mute', function () { m.mute = !m.mute; save(); renderMix(); }, m.mute ? 'warn' : '')])
+        el('div', { cls: 'sliders' }, MIX_SL.slice(0, A.isMel(c) ? 2 : 4).map(function (d) { return objSlider(d, m); })),
+        A.isMel(c) ? el('div', { cls: 'hint', text: 'Echo and reverb belong to each sound: every part keeps its own. Change them with a part\u2019s Sound row (EDIT or SONG) → Edit sound.' }) : null,
+        el('div', { cls: 'row' }, [btn(m.mute ? 'Muted' : 'Mute', function () { m.mute = !m.mute; changed(); renderMix(); }, m.mute ? 'warn' : '')])
       ]));
     });
     g.appendChild(card('Tape echo and reverb', [
@@ -2686,8 +2875,10 @@ section.show { display: flex; }
 
   // ------------------------------------------------------------------ shell
   function setTab(t) {
-    if (tr.on && (t === 'edit') !== (ui.tab === 'edit')) stop();       // the editor plays its own part, the rest play the song
+    var was = editing();
     ui.tab = t; save();
+    var now = editing();
+    if (tr.on && (was && was.clip) !== (now && now.clip)) stop();      // the editor plays its own part, the rest play the song
     TABS.forEach(function (k) { $('tab-' + k).classList.toggle('show', k === t); });
     Array.prototype.forEach.call($('tabs').children, function (b) { b.classList.toggle('on', b.dataset.tab === t); });
     if (t !== 'play' && t !== 'sound') releaseAll();
@@ -2726,9 +2917,13 @@ section.show { display: flex; }
   }
 
   function init() {
-    load(); loadLib(); bindGuide();
+    load(); loadLib(); loadSongs(); bindGuide();
     $('meter').firstElementChild.id = 'meterfill';
-    $('tabs').addEventListener('click', function (e) { if (e.target.dataset.tab) setTab(e.target.dataset.tab); });
+    $('tabs').addEventListener('click', function (e) {
+      if (!e.target.dataset.tab) return;
+      if (e.target.dataset.tab === 'sound') ui.target = null;       // the tab itself is the keyboard's sound; a part's opens from its Sound row
+      setTab(e.target.dataset.tab);
+    });
     $('play').addEventListener('click', toggle);
     $('rec').addEventListener('click', function () {
       ui.rec = !ui.rec; $('rec').classList.toggle('on', ui.rec);
@@ -2748,7 +2943,7 @@ section.show { display: flex; }
 
   window.OXY = {
     get song() { return song; }, get engine() { return engine; }, get ctx() { return ctx; }, ui: ui, tr: tr,
-    lib: lib, guide: guide, start: start, stop: stop, setTab: setTab, keyDown: keyDown, keyUp: keyUp, audio: audio, undo: undo,
+    lib: lib, get songs() { return songs; }, guide: guide, start: start, stop: stop, setTab: setTab, keyDown: keyDown, keyUp: keyUp, audio: audio, undo: undo,
     load: function (o) { replaceSong(A.validate(o), 'Loaded'); }
   };
   init();
