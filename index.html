@@ -102,6 +102,11 @@ section.show { display: flex; }
 #kb { position: relative; height: 190px; margin: 0 6px 8px; touch-action: none; border-radius: 0 0 8px 8px; overflow: hidden; border-top: 3px solid var(--cy2); }
 .key { position: absolute; top: 0; bottom: 0; background: linear-gradient(#c9cfdd, #eef1f7 85%); border: 1px solid #5c6680; border-radius: 0 0 6px 6px; color: #55607a; font-size: 10px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; }
 .key.b { background: linear-gradient(#0d111c, #2a3146); border-color: #000; bottom: 40%; z-index: 2; border-radius: 0 0 4px 4px; }
+#kb.harp { height: 250px; background: radial-gradient(ellipse at 50% 100%, #0f3a22 0%, #05080f 70%); border-top-color: #2bd46a; }
+.beam { position: absolute; top: 0; width: 3px; margin-left: -1.5px; transform-origin: 50% 0; background: linear-gradient(#8dffb6, #1fd163); box-shadow: 0 0 8px 2px rgba(60,255,130,.55); border-radius: 2px; pointer-events: none; }
+.beam.down { width: 5px; margin-left: -2.5px; background: #fff; box-shadow: 0 0 18px 7px rgba(170,255,205,.9); }
+.beamlab { position: absolute; top: 6px; font-size: 10px; color: #9fe8b9; pointer-events: none; text-shadow: 0 0 4px #000, 0 0 4px #000; padding-left: 5px; }
+.beamlab.root { color: var(--amber); }
 .key i { position: absolute; bottom: 22px; width: 7px; height: 7px; border-radius: 50%; background: var(--cy2); pointer-events: none; }
 .key.b i { bottom: 8px; background: #4f8f9a; }
 .key.root i { background: var(--amber); }
@@ -170,7 +175,7 @@ section.show { display: flex; }
   #kb { height: 220px; }
 }
 @media (max-width: 520px) { .brand { font-size: 11px; letter-spacing: .12em; line-height: 1.15; } .brand span { display: block; } }
-@media (max-height: 640px) { #kb { height: 150px; } }
+@media (max-height: 640px) { #kb { height: 150px; } #kb.harp { height: 180px; } }
 </style>
 </head>
 <body>
@@ -286,6 +291,10 @@ section.show { display: flex; }
       <li>The <b>sound list</b> picks a sound for the instrument. <b>Edit sound</b> opens the SOUND tab.</li>
       <li><b>− and +</b> above the keys move the keyboard down or up an octave. You can also slide a finger across the keys.</li>
       <li><b>Hold</b> keeps notes sounding after you lift your finger; tap Hold again to let go.</li>
+      <li><b>Laser harp</b> swaps the keys for a fan of green beams and picks the <b>Laser Harp</b> lead sound. Touch a
+        beam to play it, or slide across the beams. There is one beam for each note of the song’s key and scale, so every
+        beam fits; the amber names are the home note. − and + move the beams an octave, recording works the same as with
+        the keys, and you can pick any other sound to play on the beams. Tap Laser harp again for the keys.</li>
       <li>The <b>dots</b> on the keys mark the notes of the song’s key and scale (set on FILE). Stay on the dots and it
         will sound right. The amber dot is the home note.</li>
     </ul>
@@ -610,6 +619,7 @@ section.show { display: flex; }
     //         wave cutoff res envAmt attack decay sustain rel glide vibRate vibDep detune osc2 sub pitch2 drive
     lead: rows('lead', [
       ['Laser Lead', 0, 1800, 5, 3000, 0.005, 0.25, 0.6, 0.25, 0.06, 5.5, 12, 8, 0.7, 0, 0, 0],
+      ['Laser Harp', 0, 1300, 8, 4400, 0.003, 0.55, 0.5, 0.8, 0, 5.5, 5, 16, 0.85, 0, 12, 0.4],
       ['Soft Whistle', 2, 3000, 1, 0, 0.06, 0.3, 0.9, 0.3, 0.09, 5, 18, 0, 0, 0, 0, 0],
       ['Square Hollow', 1, 1400, 3, 1800, 0.01, 0.3, 0.7, 0.2, 0.02, 5, 6, 5, 0.3, 0.2, 0, 0],
       ['Sweep Lead', 0, 500, 9, 4200, 0.3, 1.2, 0.5, 0.6, 0.12, 4.5, 10, 12, 0.8, 0.3, 0, 0],
@@ -652,7 +662,7 @@ section.show { display: flex; }
   var SPACE = {
     strings: { 'Dry Ensemble': [0, 0.2], 'Deep Space': [0.3, 0.6], 'Warm Brass Pad': [0.05, 0.3], 'Soft Flutes': [0.08, 0.35],
       'Reed Organ': [0, 0.2], 'Cathedral Organ': [0, 0.6], 'Space Organ': [0.25, 0.5] },
-    lead: { 'Theremin': [0.35, 0.45], 'Space Bell': [0.5, 0.5], 'Piano': [0, 0.15], 'Electric Piano': [0.04, 0.22], 'Harpsichord': [0, 0.15],
+    lead: { 'Laser Harp': [0.4, 0.5], 'Theremin': [0.35, 0.45], 'Space Bell': [0.5, 0.5], 'Piano': [0, 0.15], 'Electric Piano': [0.04, 0.22], 'Harpsichord': [0, 0.15],
       'Organ': [0, 0.22], 'Rock Organ': [0, 0.18], 'Electric Guitar': [0.1, 0.2], 'Clean Guitar': [0.06, 0.22], 'Flute': [0.04, 0.3],
       'Brass': [0, 0.25], 'Solo Violin': [0.04, 0.3], 'Clarinet': [0, 0.25] },
     bass: {}
@@ -1915,7 +1925,7 @@ section.show { display: flex; }
   // ------------------------------------------------------------------ state
   var song, undoSnap = null, engine = null, ctx = null, saveTimer = null, lastMsg = '', msgTimer = null;
   var ui = { tab: 'song', inst: 'strings', track: 'drums', clipId: {}, len: 2, hold: false, rec: false, wind: false,
-    base: { strings: 48, lead: 60, bass: 36 }, pos: 0, loopR: null, sel: null, zoom: 40, target: null };
+    base: { strings: 48, lead: 60, bass: 36 }, pos: 0, loopR: null, sel: null, zoom: 40, target: null, harp: false };
   var tr = { on: false, step: 0, next: 0, timer: null, queue: [], vis: null, plan: null, done: false, endAt: 0 };
   var handles = {}, stack = [], recDown = {}, drag = null;
 
@@ -2373,6 +2383,7 @@ section.show { display: flex; }
       soundSelect(inst, snd, function (n) { song.sounds[inst] = n; changed(); renderPlay(); }),
       btn('Edit sound', function () { openSound(inst, null); })
     ]));
+    if (ui.harp) top.appendChild(el('div', { cls: 'hint', text: 'Laser harp: touch a beam, or slide across them. The beams are the notes of the song\'s key and scale, so every one fits. Any sound can be played this way: pick another from the list.' }));
     if (mono(inst)) top.appendChild(el('div', { cls: 'hint', text: titleCase(inst) + ' plays one note at a time. For chords use Strings (it has organ sounds too).' }));
     top.appendChild(el('div', { cls: 'hint', text: '● records what you play onto the ' + titleCase(inst) + ' track at the playhead, after one bar of click. ' +
       'Computer keys: A W S E D F T G Y H U J K play, Z / X change octave, Space starts and stops.' }));
@@ -2385,17 +2396,53 @@ section.show { display: flex; }
     bar.appendChild(el('div', { cls: 'oct', text: C.noteName(base) }));
     bar.appendChild(btn('+', function () { shift(12); }));
     bar.appendChild(el('div', { cls: 'sp' }));
+    bar.appendChild(btn('Laser harp', function () {
+      releaseAll(); ui.harp = !ui.harp;
+      if (ui.harp) {                           // the harp is a lead instrument with its own sound; any other can be picked after
+        ui.inst = 'lead';
+        if (song.sounds.lead.preset !== 'Laser Harp') { song.sounds.lead = makeSnd('lead', 'Laser Harp', song.sounds.lead); changed(); }
+      }
+      renderPlay();
+    }, ui.harp ? 'on' : ''));
     bar.appendChild(btn('Hold', function () { ui.hold = !ui.hold; if (!ui.hold) releaseAll(); renderKbBar(); }, ui.hold ? 'on' : ''));
   }
   var WHITE = [0, 2, 4, 5, 7, 9, 11];
   function renderKeys() {
-    var kb = clear($('kb')), w = kb.clientWidth || 400, n = clamp(Math.floor(w / 40), 7, 22), ww = w / n, base = ui.base[ui.inst];
+    var kb = clear($('kb'));
+    kb.classList.toggle('harp', ui.harp);
+    if (ui.harp) return renderHarp(kb);
+    var w = kb.clientWidth || 400, n = clamp(Math.floor(w / 40), 7, 22), ww = w / n, base = ui.base[ui.inst];
     for (var i = 0; i < n; i++) {
       var m = base + 12 * Math.floor(i / 7) + WHITE[i % 7];
       kb.appendChild(keyEl(m, i * ww, ww, false));
       var pc = WHITE[i % 7];
       if (pc !== 4 && pc !== 11 && i < n - 1) kb.appendChild(keyEl(m + 1, (i + 1) * ww - ww * 0.31, ww * 0.62, true));
     }
+  }
+  // The laser harp: a fan of beams, one per note of the song's scale. Each beam owns the strip of the fan around it, so
+  // a finger anywhere plays the nearest beam.
+  var HARP_FAN = 0.4;                          // the beams' lower ends fill this share of the width
+  function harpNotes(w) {
+    var base = ui.base[ui.inst];
+    return C.scaleNotes(song.key, song.scale, base, base + 36).slice(0, clamp(Math.floor(w / 34), 8, 15));
+  }
+  function renderHarp(kb) {
+    var w = kb.clientWidth || 400, h = kb.clientHeight || 240, notes = harpNotes(w), n = notes.length;
+    notes.forEach(function (m, i) {
+      var x = (i + 0.5) * w / n, dx = (w / 2 - x) * (1 - HARP_FAN), root = mod(m - song.key, 12) === 0;
+      var b = el('div', { cls: 'beam' + (isSounding(m) ? ' down' : ''), data: { m: m } });
+      b.style.left = x + 'px'; b.style.height = Math.sqrt(dx * dx + h * h) + 'px';
+      b.style.transform = 'rotate(' + (-Math.atan2(dx, h)) + 'rad)';
+      kb.appendChild(b);
+      var lab = el('span', { cls: 'beamlab' + (root ? ' root' : ''), text: C.noteName(m) });
+      lab.style.left = x + 'px';
+      kb.appendChild(lab);
+    });
+  }
+  function harpAt(x, y) {
+    var r = $('kb').getBoundingClientRect(), w = r.width, notes = harpNotes(w);
+    var f = clamp((y - r.top) / r.height, 0, 1), u = (x - r.left - w / 2) / (1 - (1 - HARP_FAN) * f) + w / 2;
+    return notes[clamp(Math.floor(u / (w / notes.length)), 0, notes.length - 1)];
   }
   function keyEl(m, left, width, black) {
     var k = el('div', { cls: 'key' + (black ? ' b' : ''), data: { m: m } });
@@ -2410,6 +2457,7 @@ section.show { display: flex; }
   }
   var pointers = {};
   function keyAt(x, y) {
+    if (ui.harp) return harpAt(x, y);
     var t = document.elementFromPoint(x, y);
     return t && t.classList && t.classList.contains('key') ? +t.dataset.m : null;
   }
