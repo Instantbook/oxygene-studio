@@ -295,6 +295,9 @@ section.show { display: flex; }
       <li>The <b>sound list</b> picks a sound for the instrument. <b>Edit sound</b> opens the SOUND tab.</li>
       <li><b>− and +</b> above the keys move the keyboard down or up an octave. You can also slide a finger across the keys.</li>
       <li><b>Hold</b> keeps notes sounding after you lift your finger; tap Hold again to let go.</li>
+      <li><b>Long notes are recorded as long as you hold them</b> (up to 8 bars), with Hold too: the note is written when
+        you let it go, or when you stop. A long note may run past the end of its part; it keeps sounding over the next
+        bars until the next note on that track starts, or its length is up.</li>
       <li><b>Arp</b> (the list that says <b>Arp off</b>) is the running-notes machine. Choose <b>up</b>, <b>down</b>,
         <b>up + down</b> or <b>random</b>, then hold two or more keys: they play one after another in time with the tempo.
         The two lists beside it set the speed and how many octaves the pattern climbs. Switch <b>Hold</b> on and you can
@@ -400,7 +403,7 @@ section.show { display: flex; }
       <li>The top row chooses the track. The first list chooses <b>which part</b>; the second sets its <b>length</b> in bars.
         <b>New part</b> makes an empty one.</li>
       <li>The grid: time runs left to right, 16 steps to a bar, with a stronger line every beat.</li>
-      <li><b>Bass, Strings, Lead:</b> each row is a note. First choose the note length (1 step up to 2 bars), then tap a
+      <li><b>Bass, Strings, Lead:</b> each row is a note. First choose the note length (1 step up to 8 bars), then tap a
         square to put a note there. Tap the start of a note to remove it. The rows are the notes of the song’s scale.
         Strings can stack notes into chords; Bass and Lead keep one note at a time.</li>
       <li><b>Drums:</b> each row is a drum. Tap once for a normal hit, again for a loud (accented) hit, a third time to clear.
@@ -1119,7 +1122,7 @@ section.show { display: flex; }
   'use strict';
   var C = root.OxyCore || require('./core.js');
   var S = C.STEPS, TRACKS = C.CHANNELS, LANES = TRACKS.concat(['wind']);
-  var MAX_BARS = 256, MAX_CLIPS = 64, CLIP_BARS = [1, 2, 4, 8];
+  var MAX_BARS = 256, MAX_CLIPS = 64, CLIP_BARS = [1, 2, 4, 8], MAX_NOTE = 128;   // a note lasts 8 bars at most
   var LABEL = { strings: 'Strings', lead: 'Lead', bass: 'Bass', drums: 'Drums', fx: 'FX', wind: 'Wind' };
   var NOT_A_SONG = 'This is not an Oxygène Studio song file.';
 
@@ -1199,7 +1202,7 @@ section.show { display: flex; }
   function addNote(clip, step, midi, len, mono) {
     var arr = clip.notes, total = clip.bars * S;
     if (step < 0 || step >= total) return;
-    len = Math.max(1, Math.min(len, total - step));
+    len = Math.max(1, Math.min(len, MAX_NOTE));          // it may ring on past the end of the part
     for (var i = arr.length - 1; i >= 0; i--) {
       var n = arr[i];
       if ((n.m === midi && n.s < step + len && step < n.s + n.l) || (mono && n.s === step)) arr.splice(i, 1);
@@ -1282,6 +1285,9 @@ section.show { display: flex; }
   // ---- what sounds on a step ----------------------------------------------------
   // `snd` names the sound of each melodic track whose part starts a note on this step.
   function emptyEvents() { return { drums: [], fx: [], strings: [], lead: null, bass: null, wind: false, snd: {} }; }
+  // How long a note sounds: a note that fits its part stops where the placed block stops; one drawn or played longer
+  // than its part rings on to its full length, until the track's next note takes over.
+  function ring(n, clip, maxLen) { return n.s + n.l > clip.bars * S ? n.l : Math.min(n.l, maxLen); }
   function clipInto(ev, track, clip, local, maxLen) {
     if (!clip.notes) {
       laneIds(track).forEach(function (d) {
@@ -1292,7 +1298,7 @@ section.show { display: flex; }
     }
     var arr = clip.notes, i, n;
     if (track === 'strings') {
-      for (i = 0; i < arr.length; i++) if (arr[i].s === local) { ev.strings.push({ m: arr[i].m, l: Math.min(arr[i].l, maxLen) }); ev.snd.strings = clip.snd; }
+      for (i = 0; i < arr.length; i++) if (arr[i].s === local) { ev.strings.push({ m: arr[i].m, l: ring(arr[i], clip, maxLen) }); ev.snd.strings = clip.snd; }
       return;
     }
     for (i = 0; i < arr.length; i++) {
@@ -1301,7 +1307,7 @@ section.show { display: flex; }
       var next = null;
       for (var j = 0; j < arr.length; j++) if (arr[j].s > n.s && (!next || arr[j].s < next.s)) next = arr[j];
       var tied = !!next && next.s < n.s + n.l && next.s - n.s < maxLen;   // overlapping notes slur into each other
-      ev[track] = { m: n.m, l: Math.min(n.l, maxLen), tied: tied };
+      ev[track] = { m: n.m, l: ring(n, clip, maxLen), tied: tied };
       ev.snd[track] = clip.snd;
       return;
     }
@@ -1391,7 +1397,7 @@ section.show { display: flex; }
           (Array.isArray(c.notes) ? c.notes : []).slice(0, 2048).forEach(function (n) {
             var st = n && whole(n.s, 0, total - 1), m = n && whole(n.m, 0, 127);
             if (st === null || m === null) return;
-            clip.notes.push({ s: st, m: m, l: Math.max(1, Math.min(whole(n.l, 1, total) || 1, total - st)) });
+            clip.notes.push({ s: st, m: m, l: whole(n.l, 1, MAX_NOTE) || 1 });
           });
           sortNotes(clip.notes);
           clip.snd = cleanSound(t, c.snd, s.sounds[t]);     // parts from before sounds were per part take the track's sound
@@ -1420,7 +1426,7 @@ section.show { display: flex; }
   var DEMOS = C.DEMOS.map(function (d) { return { name: d.name, build: function () { return fromV2(d.build()); } }; });
 
   var api = {
-    TRACKS: TRACKS, LANES: LANES, LABEL: LABEL, MAX_BARS: MAX_BARS, CLIP_BARS: CLIP_BARS, DEMOS: DEMOS,
+    TRACKS: TRACKS, LANES: LANES, LABEL: LABEL, MAX_BARS: MAX_BARS, CLIP_BARS: CLIP_BARS, MAX_NOTE: MAX_NOTE, DEMOS: DEMOS,
     isMel: isMel, laneIds: laneIds, newSong: newSong, getClip: getClip, newClip: newClip, copyClip: copyClip,
     removeClip: removeClip, setBars: setBars, addNote: addNote, toggleNote: toggleNote, rowsFor: rowsFor,
     applyRhythm: applyRhythm, clearClip: clearClip, clipEmpty: clipEmpty, at: at, fits: fits, freeLen: freeLen,
@@ -1586,6 +1592,8 @@ section.show { display: flex; }
     // cutoff follows the keyboard a third of the way
     var cut = Math.min(16000, p.cutoff * Math.pow(2, (midi - 60) / 12 * 0.33));
     this.filter.frequency.setTargetAtTime(cut, time, 0.004);
+    // a new note takes over: whatever the note before had planned for later (its release) no longer applies
+    this.amp.gain.cancelScheduledValues(time); this.filter.detune.cancelScheduledValues(time);
     this.filter.detune.setTargetAtTime(p.envAmt, time, Math.max(0.002, tc(p.attack)));
     this.filter.detune.setTargetAtTime(p.envAmt * p.sustain * 0.5, time + p.attack, tc(p.decay));
     this.amp.gain.setTargetAtTime(vel, time, tc(p.attack));
@@ -1840,7 +1848,9 @@ section.show { display: flex; }
     h.oscs[0].onended = function () { h.g.disconnect(); self.sVoices = self.sVoices.filter(function (v) { return v !== h; }); };
   };
   Engine.prototype.stringsNote = function (midi, time, dur, vel) {
-    this.stringsOff(this.stringsOn(midi, time, vel), Math.max(time, this.ctx.currentTime) + dur);
+    var h = this.stringsOn(midi, time, vel);
+    h.seq = true;                              // played by the song, not by a finger
+    this.stringsOff(h, Math.max(time, this.ctx.currentTime) + dur);
   };
 
   Engine.prototype.bend = function (inst, cents) {
@@ -2016,6 +2026,11 @@ section.show { display: flex; }
 
   Engine.prototype.allOff = function () {
     this.lead.allOff(); this.bass.allOff();
+    var t = this.ctx.currentTime;              // long strings notes of the song stop with it
+    this.sVoices.forEach(function (h) {
+      if (!h.seq) return;
+      h.g.gain.cancelScheduledValues(t); h.g.gain.setTargetAtTime(0, t, Math.min(0.15, tc(h.release)));
+    });
   };
 
   // Renders steps [from, from + count) of the song's timeline to a stereo AudioBuffer, with a tail for echo and reverb.
@@ -2201,6 +2216,7 @@ section.show { display: flex; }
   }
   function stop() {
     if (!tr.on) return;
+    Object.keys(recDown).forEach(function (m) { recEnd(+m); });      // notes still held are written up to here
     tr.on = false; clearInterval(tr.timer); tr.queue = []; tr.vis = null;
     if (engine) {
       engine.allOff(); engine.setWind(ui.wind, 0);
@@ -2287,7 +2303,7 @@ section.show { display: flex; }
     if (mono(inst)) { stack = stack.filter(function (m) { return m !== midi; }); stack.push(midi); e[inst].noteOn(midi, 0, 1); }
     else if (!handles[midi]) handles[midi] = e.stringsOn(midi, 0, 1);
     var r = recPos();
-    if (r) { if (ui.hold) recNote(inst, midi, r, ui.len); else recDown[midi] = r; }
+    if (r) { r.inst = inst; recDown[midi] = r; }       // written when the note is let go, with the length it was held
     keyLight(midi, true);
   }
   function soundOff(midi) {
@@ -2299,12 +2315,14 @@ section.show { display: flex; }
         if (stack.length) engine[inst].noteOn(stack[stack.length - 1], 0, 1); else engine[inst].noteOff(0);
       }
     } else if (handles[midi]) { engine.stringsOff(handles[midi], 0); delete handles[midi]; }
-    var r = recDown[midi];
-    if (r) {
-      delete recDown[midi];
-      if (tr.on) recNote(inst, midi, r, clamp(Math.round((ctx.currentTime - r.t) / C.stepSeconds(song.bpm)), 1, 8 * S));
-    }
+    recEnd(midi);
     keyLight(midi, false);
+  }
+  function recEnd(midi) {
+    var r = recDown[midi];
+    if (!r) return;
+    delete recDown[midi];
+    if (tr.on) recNote(r.inst, midi, r, clamp(Math.round((ctx.currentTime - r.t) / C.stepSeconds(song.bpm)), 1, A.MAX_NOTE));
   }
   function isSounding(midi) { return arp.held.indexOf(midi) >= 0 || (mono(ui.inst) ? stack[stack.length - 1] === midi : !!handles[midi]); }
   // ---- arpeggiator: the held keys, played one after another in time with the song
@@ -2357,7 +2375,7 @@ section.show { display: flex; }
     }
     if (ui.hold) {
       if (isSounding(midi)) return soundOff(midi);
-      if (mono(ui.inst)) stack.slice().forEach(function (m) { if (m !== midi) { stack = stack.filter(function (x) { return x !== m; }); keyLight(m, false); } });
+      if (mono(ui.inst)) stack.slice().forEach(function (m) { if (m !== midi) { stack = stack.filter(function (x) { return x !== m; }); recEnd(m); keyLight(m, false); } });
       return soundOn(midi);
     }
     soundOn(midi);
@@ -2369,6 +2387,7 @@ section.show { display: flex; }
   function releaseAll() {
     Object.keys(handles).forEach(function (m) { soundOff(+m); });
     stack.slice().reverse().forEach(function (m) { soundOff(m); });
+    Object.keys(recDown).forEach(function (m) { recEnd(+m); });
     stack = []; recDown = {};
     arp.held.slice().forEach(arpDrop);
     if (engine) { engine.lead.noteOff(0); engine.bass.noteOff(0); }
@@ -2873,7 +2892,7 @@ section.show { display: flex; }
   var TRACK_TABS = [{ v: 'drums', label: 'Drums' }, { v: 'bass', label: 'Bass' }, { v: 'strings', label: 'Strings' },
     { v: 'lead', label: 'Lead' }, { v: 'fx', label: 'FX' }];
   var NOTE_LEN = [{ v: 1, label: 'Note: 1 step' }, { v: 2, label: 'Note: 2 steps' }, { v: 4, label: 'Note: 1 beat' },
-    { v: 8, label: 'Note: 2 beats' }, { v: 16, label: 'Note: 1 bar' }, { v: 32, label: 'Note: 2 bars' }];
+    { v: 8, label: 'Note: 2 beats' }, { v: 16, label: 'Note: 1 bar' }, { v: 32, label: 'Note: 2 bars' }, { v: 64, label: 'Note: 4 bars' }, { v: 128, label: 'Note: 8 bars' }];
   function renderEdit() {
     var top = clear($('seqtop')), track = ui.track, clip = curClip(), melodic = A.isMel(track);
     top.appendChild(el('div', { cls: 'row' }, [seg(TRACK_TABS, function (v) { return v === track; }, function (v) {
