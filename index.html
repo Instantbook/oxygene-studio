@@ -403,7 +403,7 @@ section.show { display: flex; }
       <li>The top row chooses the track. The first list chooses <b>which part</b>; the second sets its <b>length</b> in bars.
         <b>New part</b> makes an empty one.</li>
       <li>The grid: time runs left to right, 16 steps to a bar, with a stronger line every beat.</li>
-      <li><b>Bass, Strings, Lead:</b> each row is a note. First choose the note length (1 step up to 8 bars), then tap a
+      <li><b>Bass, Strings, Lead:</b> each row is a note. The grid holds every octave from C1 to C8: scroll up for higher notes, down for lower. First choose the note length (1 step up to 8 bars), then tap a
         square to put a note there. Tap the start of a note to remove it. The rows are the notes of the song’s scale.
         Strings can stack notes into chords; Bass and Lead keep one note at a time.</li>
       <li><b>Drums:</b> each row is a drum. Tap once for a normal hit, again for a loud (accented) hit, a third time to clear.
@@ -565,9 +565,9 @@ section.show { display: flex; }
 
   // Melodic tracks: range shown in the sequencer, and where the keyboard starts.
   var TRACKS = {
-    strings: { label: 'Strings', lo: 45, hi: 84, mono: false, kb: 48 },
-    lead: { label: 'Lead', lo: 57, hi: 93, mono: true, kb: 60 },
-    bass: { label: 'Bass', lo: 28, hi: 57, mono: true, kb: 36 }
+    strings: { label: 'Strings', lo: 24, hi: 108, mono: false, kb: 48 },     // every track has the full range, C1 to C8, in the editor
+    lead: { label: 'Lead', lo: 24, hi: 108, mono: true, kb: 60 },
+    bass: { label: 'Bass', lo: 24, hi: 108, mono: true, kb: 36 }
   };
   var MELODIC = ['strings', 'lead', 'bass'];
   var CHANNELS = ['strings', 'lead', 'bass', 'drums', 'fx'];
@@ -2994,7 +2994,14 @@ section.show { display: flex; }
   function centreGrid() {
     var wrap = $('gridwrap');
     wrap.scrollLeft = 0;
-    wrap.scrollTop = A.isMel(ui.track) ? Math.max(0, (wrap.scrollHeight - wrap.clientHeight) / 2) : 0;
+    wrap.scrollTop = 0;
+    var clip = curClip(), cell = $('grid').querySelector('.c');
+    if (!A.isMel(ui.track) || !clip || !cell) return;
+    // the grid holds every octave: open it on the part's notes, or on the track's usual register when it is empty
+    var want = C.TRACKS[ui.track].kb + 9, best = 0;
+    if (clip.notes.length) want = clip.notes.reduce(function (a, n) { return a + n.m; }, 0) / clip.notes.length;
+    gridRows.forEach(function (row, r) { if (Math.abs(row.m - want) < Math.abs(gridRows[best].m - want)) best = r; });
+    wrap.scrollTop = Math.max(0, (best + 1.5) * cell.offsetHeight - wrap.clientHeight / 2);
   }
   function gridTap(e) {
     var c = e.target, clip = curClip();
